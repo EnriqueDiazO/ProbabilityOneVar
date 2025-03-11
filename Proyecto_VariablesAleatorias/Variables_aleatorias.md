@@ -130,7 +130,7 @@ hist_salarios_frontera <- ggplot(data_2024_long_frontera, aes(x = salario)) +
 ggsave("images/hist_salarios_frontera.png", plot = hist_salarios_frontera, width = 8, height = 8, bg = "white")
 ```
 
-![Distribución del salario en la zona fronteriza](Proyecto_VariablesAleatorias/images/hist_salarios_frontera.png)
+![Distribución del salario en la zona fronteriza](/images/hist_salarios_frontera.png)
 
 
 ### Nota: No hay variación significativa en los salarios de la zona fronteriza.
@@ -165,7 +165,7 @@ hist_salarios <- ggplot(data_2024_long_rest, aes(x = salario)) +
 ggsave("images/hist_salarios.png", plot = hist_salarios, width = 8, height = 8, bg = "white")
 ```
 
-![Distribución del salario en el resto del país](Proyecto_VariablesAleatorias/images/hist_salarios.png)
+![Distribución del salario en el resto del país](/images/hist_salarios.png)
 
 
 - Profesiones Mejor Pagadas
@@ -191,7 +191,7 @@ plot_top_10 <- ggplot(top_10_professions, aes(x = reorder(profesion, salario_pro
 ggsave("images/top_10_plot.png", plot = plot_top_10, width = 8, height = 8, bg = "white")
 ```
 
-![Top 10 oficios mejor pagados](Proyecto_VariablesAleatorias/images/top_10_plot.png)
+![Top 10 oficios mejor pagados](/images/top_10_plot.png)
 
 
 # Probabilidad de Ganar un Salario Específico
