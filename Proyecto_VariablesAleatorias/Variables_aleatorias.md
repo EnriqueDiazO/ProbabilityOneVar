@@ -324,7 +324,47 @@ summary(data_2024)
 
 - Histogramas de Distribución de Salarios
 
+``` r
+# Filtrar datos por zona geográfica
+data_2024_rest <- data_2024 %>% filter(zona == "restodelpais")
+
+# Convertir datos a formato largo
+data_2024_long_rest <- data_2024_rest %>% pivot_longer(cols = -c(inicio_vigencia, zona),
+                                                       names_to = "profesion",
+                                                       values_to = "salario")
+
+# Graficar histograma de distribución de salarios
+ggplot(data_2024_long_rest, aes(x = salario)) +
+  geom_histogram(binwidth = 10, fill = "blue", alpha = 0.7, color = "black") +
+  scale_x_continuous(breaks = seq(0, max(data_2024_long_rest$salario, na.rm = TRUE), by = 50)) +
+  labs(title = "Distribución del salario en el resto de los estados no fronterizos (2024)",
+       x = "Minimum Wage",
+       y = "Frequency") +
+  theme_minimal()
+```
+
+![](Variables_aleatorias_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
 - Profesiones Mejor Pagadas
+
+``` r
+top_10_professions <- data_2024_long_rest %>%
+  group_by(profesion) %>%
+  summarise(salario_promedio = mean(salario, na.rm = TRUE)) %>%
+  arrange(desc(salario_promedio)) %>%
+  slice_head(n = 10)
+
+ggplot(top_10_professions, aes(x = reorder(profesion, salario_promedio), y = salario_promedio)) +
+  geom_bar(stat = "identity", fill = "darkgreen", alpha = 0.7) +
+  geom_text(aes(label = round(salario_promedio, 2)), hjust = 0.2, size = 4) +
+  coord_flip() +
+  labs(title = "Top 10 oficios mejor pagados (2024)",
+       x = "Oficio",
+       y = "Salario Promedio") +
+  theme_minimal()
+```
+
+![](Variables_aleatorias_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 # Probabilidad de Ganar un Salario Específico
 
@@ -334,6 +374,483 @@ de probabilidad $f_X(x)$. En este caso, aproximamos esta probabilidad
 utilizando los datos empíricos:
 
 $$ P(a \leq X \leq b) = \frac{\mbox{N\'umero de observaciones en $[a,b]$}}{\mbox{Total de observaciones}} $$
+
+``` r
+# Función para calcular la probabilidad de ganar entre 200 y 300 pesos
+calcular_probabilidad <- function(min_val = 200, max_val = 300, region = "restodelpais") {
+  data_2024_long <- data_2024 %>% pivot_longer(cols = -c(inicio_vigencia, zona),
+                                               names_to = "profesion",
+                                               values_to = "salario")
+  data_rest <- data_2024_long %>% filter(zona == region)
+  total <- nrow(data_rest)
+  en_rango <- nrow(data_rest %>% filter(salario >= min_val & salario <= max_val))
+  probabilidad <- en_rango / total
+  return(probabilidad)
+}
+
+# Ejemplo de cálculo
+calcular_probabilidad(min_val = 200, max_val = 350, region = "restodelpais")
+```
+
+    ## [1] 0.9661017
+
+``` r
+library(knitr)
+
+summary_data <- data_2024_long_rest %>%
+  group_by(profesion) %>%
+  summarise(Avg_Salary = mean(salario, na.rm = TRUE),
+            Min_Salary = min(salario, na.rm = TRUE),
+            Max_Salary = max(salario, na.rm = TRUE)) %>%
+  arrange(desc(Avg_Salary)) %>%
+  slice_head(n = 30)
+
+kable(summary_data, format = "html", caption = "Rango de salarios en oficios (2024)")
+```
+
+<table>
+<caption>
+Rango de salarios en oficios (2024)
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+profesion
+</th>
+<th style="text-align:right;">
+Avg_Salary
+</th>
+<th style="text-align:right;">
+Min_Salary
+</th>
+<th style="text-align:right;">
+Max_Salary
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+reportero
+</td>
+<td style="text-align:right;">
+557.41
+</td>
+<td style="text-align:right;">
+557.41
+</td>
+<td style="text-align:right;">
+557.41
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+reportero_grafico
+</td>
+<td style="text-align:right;">
+557.41
+</td>
+<td style="text-align:right;">
+557.41
+</td>
+<td style="text-align:right;">
+557.41
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+trabajador_social
+</td>
+<td style="text-align:right;">
+320.65
+</td>
+<td style="text-align:right;">
+320.65
+</td>
+<td style="text-align:right;">
+320.65
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+draga
+</td>
+<td style="text-align:right;">
+303.61
+</td>
+<td style="text-align:right;">
+303.61
+</td>
+<td style="text-align:right;">
+303.61
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+buldozer
+</td>
+<td style="text-align:right;">
+300.84
+</td>
+<td style="text-align:right;">
+300.84
+</td>
+<td style="text-align:right;">
+300.84
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+mecanico_autos
+</td>
+<td style="text-align:right;">
+296.58
+</td>
+<td style="text-align:right;">
+296.58
+</td>
+<td style="text-align:right;">
+296.58
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+secretaria
+</td>
+<td style="text-align:right;">
+295.98
+</td>
+<td style="text-align:right;">
+295.98
+</td>
+<td style="text-align:right;">
+295.98
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chofer_camion
+</td>
+<td style="text-align:right;">
+293.06
+</td>
+<td style="text-align:right;">
+293.06
+</td>
+<td style="text-align:right;">
+293.06
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cocinero
+</td>
+<td style="text-align:right;">
+290.81
+</td>
+<td style="text-align:right;">
+290.81
+</td>
+<td style="text-align:right;">
+290.81
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+maquinaria_agricola
+</td>
+<td style="text-align:right;">
+288.59
+</td>
+<td style="text-align:right;">
+288.59
+</td>
+<td style="text-align:right;">
+288.59
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sastreria_domicilio
+</td>
+<td style="text-align:right;">
+288.59
+</td>
+<td style="text-align:right;">
+288.59
+</td>
+<td style="text-align:right;">
+288.59
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+albanileria
+</td>
+<td style="text-align:right;">
+287.17
+</td>
+<td style="text-align:right;">
+287.17
+</td>
+<td style="text-align:right;">
+287.17
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+repostero
+</td>
+<td style="text-align:right;">
+287.17
+</td>
+<td style="text-align:right;">
+287.17
+</td>
+<td style="text-align:right;">
+287.17
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ebanista
+</td>
+<td style="text-align:right;">
+286.51
+</td>
+<td style="text-align:right;">
+286.51
+</td>
+<td style="text-align:right;">
+286.51
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+radiotecnico_electrico
+</td>
+<td style="text-align:right;">
+286.51
+</td>
+<td style="text-align:right;">
+286.51
+</td>
+<td style="text-align:right;">
+286.51
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chofer_camioneta
+</td>
+<td style="text-align:right;">
+284.76
+</td>
+<td style="text-align:right;">
+284.76
+</td>
+<td style="text-align:right;">
+284.76
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+electricista_autos
+</td>
+<td style="text-align:right;">
+284.16
+</td>
+<td style="text-align:right;">
+284.16
+</td>
+<td style="text-align:right;">
+284.16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+soldador_soplete
+</td>
+<td style="text-align:right;">
+284.16
+</td>
+<td style="text-align:right;">
+284.16
+</td>
+<td style="text-align:right;">
+284.16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+carpintero_muebles
+</td>
+<td style="text-align:right;">
+282.44
+</td>
+<td style="text-align:right;">
+282.44
+</td>
+<td style="text-align:right;">
+282.44
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hojalateria
+</td>
+<td style="text-align:right;">
+282.44
+</td>
+<td style="text-align:right;">
+282.44
+</td>
+<td style="text-align:right;">
+282.44
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+electricista_instalaciones
+</td>
+<td style="text-align:right;">
+281.44
+</td>
+<td style="text-align:right;">
+281.44
+</td>
+<td style="text-align:right;">
+281.44
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+mosaico
+</td>
+<td style="text-align:right;">
+281.44
+</td>
+<td style="text-align:right;">
+281.44
+</td>
+<td style="text-align:right;">
+281.44
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+herreria
+</td>
+<td style="text-align:right;">
+277.80
+</td>
+<td style="text-align:right;">
+277.80
+</td>
+<td style="text-align:right;">
+277.80
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+pintor_autos
+</td>
+<td style="text-align:right;">
+277.80
+</td>
+<td style="text-align:right;">
+277.80
+</td>
+<td style="text-align:right;">
+277.80
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+plomero
+</td>
+<td style="text-align:right;">
+276.42
+</td>
+<td style="text-align:right;">
+276.42
+</td>
+<td style="text-align:right;">
+276.42
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+fogonero
+</td>
+<td style="text-align:right;">
+275.93
+</td>
+<td style="text-align:right;">
+275.93
+</td>
+<td style="text-align:right;">
+275.93
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+maquina_madera
+</td>
+<td style="text-align:right;">
+275.93
+</td>
+<td style="text-align:right;">
+275.93
+</td>
+<td style="text-align:right;">
+275.93
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+pintor_casas
+</td>
+<td style="text-align:right;">
+275.93
+</td>
+<td style="text-align:right;">
+275.93
+</td>
+<td style="text-align:right;">
+275.93
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+chofer_grua
+</td>
+<td style="text-align:right;">
+273.92
+</td>
+<td style="text-align:right;">
+273.92
+</td>
+<td style="text-align:right;">
+273.92
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+electricista_motores
+</td>
+<td style="text-align:right;">
+273.92
+</td>
+<td style="text-align:right;">
+273.92
+</td>
+<td style="text-align:right;">
+273.92
+</td>
+</tr>
+</tbody>
+</table>
 
 # Conclusión
 
