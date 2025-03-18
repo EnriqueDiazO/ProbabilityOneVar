@@ -32,7 +32,7 @@ El siguiente repositorio contiene diferentes ejemplos en donde se realizan anál
   - Variables Cuantitativas vs Variables Cualitativas
 
 
-![Diagrama General del Análisis Exploratorio de Datos (EDA)](https://github.com/EnriqueDiazO/ProbabilityOneVar/blob/main/images/Diagrama EDA en R.png)
+![Diagrama General del Análisis Exploratorio de Datos (EDA)](https://github.com/EnriqueDiazO/ProbabilityOneVar/blob/main/images/Diagrama%20EDA%20en%20R.png)
 
 
 ¡Explora el código y aprende más sobre probabilidad aplicada! 🎲
