@@ -1,18 +1,38 @@
-# Proyecto: Variables Aleatorias y Salarios 📊
+# Proyectos de Analisis Exploratorio y Probabístico en Conjunto de Datos    📊
 
-Este proyecto explora el concepto de **variables aleatorias** en probabilidad y su aplicación en el análisis de salarios.
+El siguiente repositorio contiene diferentes ejemplos en donde se realizan análisis exploratorio de datos en conjuntos de datasets para ilustrar los conceptos que abarquen dos diferentes ramas
 
-## 📄 Contenido:
+## Conceptos Básicos de Probabilidad
 
--   **Variables_aleatorias.Rmd** → Explicación y ejemplos de variables aleatorias.\
--   **salarios.r** → Análisis de datos salariales usando distribuciones probabilísticas.
+- Variable Aleatoria discreta
 
-## 🚀 Tecnologías
+- Variable Aleatoria Continua
 
--   **Lenguaje**: R\
--   **Librerías utilizadas**: ggplot2, dplyr, etc.
+- Función de Densidad de Probabilidad
+
+- Función de Probabilidad Acumulada 
+
+- Esperanza y Varianza de variables aleatorias.
+
+- Tabla de Contingencias.
+
+
+## Conceptos Básicos del Análisis Exploratorio de Datos (EDA)
+
+- Información básica de un dataset
+
+- Análisis Unidimensional (variables cuantitativas y variables cualitativas)
+
+- Análisis Multidimensional
+
+  - Variables Cuantitativas vs Variables Cuantitativas
+  
+  - Variables Cualitativas vs Variables Cualitativas
+  
+  - Variables Cuantitativas vs Variables Cualitativas
+
+
+![Diagrama General del Análisis Exploratorio de Datos (EDA)](https://github.com/EnriqueDiazO/ProbabilityOneVar/blob/main/images/Diagrama EDA en R.png)
+
 
 ¡Explora el código y aprende más sobre probabilidad aplicada! 🎲
-
-## Nueva línea agregada
-## test7333
