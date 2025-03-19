@@ -1,4 +1,0 @@
-          Startup Name               Industry         Funding Rounds Funding Amount (M USD)      Valuation (M USD)        Revenue (M USD)              Employees       Market Share (%) 
-                     0                      0                      0                      0                      0                      0                      0                      0 
-            Profitable           Year Founded                 Region            Exit Status 
-                     0                      0                      0                      0 
