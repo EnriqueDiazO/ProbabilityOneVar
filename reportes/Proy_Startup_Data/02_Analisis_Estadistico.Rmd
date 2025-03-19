@@ -1,0 +1,211 @@
+---
+title: "Guía de Gráficos para el Análisis Exploratorio de Datos (EDA)"
+author: "Enrique Díaz Ocampo"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+# 📌 Configuración inicial
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## 1️⃣ **Introducción**
+Esta guía proporciona una serie de gráficos para realizar un **Análisis Exploratorio de Datos (EDA)** en diferentes niveles:
+
+- **Análisis Unidimensional:** Distribución de una sola variable.
+
+- **Análisis Multivariado:** Relación entre dos o más variables.
+
+- **Visualización con `ggplot2`** para explorar patrones en los datos.
+
+Esta guía te ayudará a seleccionar el gráfico más adecuado según el tipo de variable analizada.
+
+---
+
+## 2️⃣ **Carga de Librerías y Configuración**
+```{r}
+# 📌 Cargar librerías necesarias
+library(here)           # Manejo de rutas dinámicas
+library(janitor)        # Limpieza de nombres de columnas
+library(summarytools)   # Resumen estadístico detallado
+library(ggplot2)        # Gráficos
+library(dplyr)          # Manipulación de datos
+library(plotly)         # Gŕaficos Interactivos
+
+# 📌 Configuración de gráficos globales
+theme_set(theme_minimal())
+source(here("reportes/Proy_Startup_Data/00_CONFIGURACION.r"))
+
+# 📌 Cargar scripts de preprocesamiento
+source(here("scripts/utils.r"))
+source(here("scripts/1_preprocesamiento_esp_dataset.r"))
+source(here("scripts/2_analisis_gráfico.r"))
+```
+
+
+## 3️⃣ Carga y Preprocesamiento de Datos
+
+📌 ¿Qué hace esta función?
+
+✔ Limpia los nombres de las columnas.
+✔ Convierte variables categóricas en factores.
+✔ Filtra valores inválidos.
+✔ Retorna un dataset listo para análisis.
+
+```{r}
+# 📌 Cargar y preprocesar el dataset
+dataset_startup <- preprocesar_datos(here("datasets/startup_data_limpio.csv"), "Startup Data")
+```
+
+## 4️⃣ Análisis Unidimensional
+
+El análisis unidimensional permite estudiar la distribución de una sola variable.
+
+### 📌 Boxplot para una variable cuantitativa
+
+### 📌 Útil para: Detectar valores atípicos y distribución de datos.
+
+```{r}
+# Boxplot para número de empleados
+p_boxplot_empleados <- crear_boxplot(
+  data = dataset_startup, 
+  y = "employees", 
+  title = "Distribución del Número de Empleados en Startups",
+  xlab = "Startups",
+  ylab = "Número de Empleados",
+  colores = "lightblue"
+)
+
+guardar_grafico(p_boxplot_empleados, here("reportes/Proy_Startup_Data/resultados_generados/boxplot_empleados.png"))
+convertir_interactivo(p_boxplot_empleados)
+
+```
+
+## 📌 Histograma para una variable cuantitativa
+
+### 📌 Útil para: Observar la distribución de frecuencia de una variable numérica.
+
+```{r}
+# Histograma de financiamiento recibido
+p_histograma_financiamiento <- crear_histograma(
+  data = dataset_startup, 
+  x = "funding_amount_m_usd",
+  title = "Distribución del Financiamiento Recibido por Startups",
+  xlab = "Monto de Financiamiento (millones USD)",
+  ylab = "Frecuencia",
+  binwidth = 10,
+  colores = "blue"
+)
+
+guardar_grafico(p_histograma_financiamiento, here("reportes/Proy_Startup_Data/resultados_generados/histograma_financiamiento.png"))
+convertir_interactivo(p_histograma_financiamiento)
+
+```
+
+
+## 📌 Barplot para una variable cualitativa
+
+### 📌 Útil para: Mostrar la frecuencia de categorías en una variable cualitativa.
+
+```{r}
+# Distribución de startups por industria
+p_barplot_industria <- crear_barplot(
+  data = dataset_startup,
+  x = "industry",
+  fill = "industry",
+  title = "Distribución de Startups por Industria",
+  xlab = "Industria",
+  ylab = "Número de Startups",
+  voltear = TRUE
+)
+
+guardar_grafico(p_barplot_industria, here("reportes/Proy_Startup_Data/resultados_generados/barplot_industria.png"))
+convertir_interactivo(p_barplot_industria)
+
+```
+
+
+
+
+##5️⃣ Análisis Multivariado
+
+El análisis multivariado permite explorar relaciones entre dos o más variables.
+
+## 📌 Comparación del Financiamiento por Industria
+
+## 📌 Útil para: Evaluar si ciertas industrias reciben más financiamiento que otras.
+
+```{r}
+p_boxplot_financiamiento_industria <- crear_boxplot(
+  data = dataset_startup,
+  x = "industry",
+  y = "funding_amount_m_usd",
+  fill = "industry",
+  title = "Distribución del Financiamiento por Industria",
+  xlab = "Industria",
+  ylab = "Monto de Financiamiento (millones USD)",
+  rotar_x = TRUE
+)
+
+guardar_grafico(p_boxplot_financiamiento_industria, here("reportes/Proy_Startup_Data/resultados_generados/boxplot_financiamiento_industria.png"))
+convertir_interactivo(p_boxplot_financiamiento_industria)
+
+```
+
+
+## 📌 Relación entre Valuación y Financiamiento
+
+## 📌 Útil para: Explorar la correlación entre el financiamiento recibido y la valuación de la startup.
+
+```{r}
+p_scatter_valuacion_vs_financiamiento <- crear_scatterplot(
+  data = dataset_startup,
+  x = "funding_amount_m_usd",
+  y = "valuation_m_usd",
+  title = "Relación entre Valuación y Financiamiento",
+  xlab = "Financiamiento Recibido (millones USD)",
+  ylab = "Valuación de la Startup (millones USD)"
+)
+
+guardar_grafico(p_scatter_valuacion_vs_financiamiento, here("reportes/Proy_Startup_Data/resultados_generados/scatter_valuacion_vs_financiamiento.png"))
+convertir_interactivo(p_scatter_valuacion_vs_financiamiento)
+
+```
+
+## 📌 Estado de Salida de Startups
+
+## 📌 Útil para: Analizar la cantidad de startups que han sido adquiridas, han salido a la bolsa (IPO) o permanecen privadas.
+
+```{r}
+p_barplot_exit_status <- crear_barplot(
+  data = dataset_startup,
+  x = "exit_status",
+  fill = "exit_status",
+  title = "Estado de Salida de Startups",
+  xlab = "Estado de Salida",
+  ylab = "Cantidad de Startups",
+  colores = c("Acquired" = "blue", "IPO" = "purple", "Private" = "gray")
+)
+
+guardar_grafico(p_barplot_exit_status, here("reportes/Proy_Startup_Data/resultados_generados/barplot_exit_status.png"))
+convertir_interactivo(p_barplot_exit_status)
+
+```
+
+
+
+# 📌 Conclusión
+
+Este análisis gráfico ha permitido visualizar patrones clave en el éxito de las startups:
+
+✅ El financiamiento y la valuación están fuertemente correlacionados.
+
+✅ Algunas industrias, como FinTech y AI, reciben más financiamiento en promedio.
+
+✅ Las startups con mayor market share tienden a encontrarse en regiones específicas.
+
+✅ El número de startups rentables aún es bajo, indicando largos períodos de inversión antes de alcanzar sostenibilidad.
+

@@ -59,7 +59,12 @@ preprocesar_datos <- function(ruta_dataset, proyecto) {
   if (proyecto == "Startup Data") {
     cat("📊 Aplicando preprocesamiento específico para Startup Data...\n")
     datos <- datos %>%
-      mutate_if(is.numeric, ~ replace(., is.na(.), median(., na.rm = TRUE)))  # Reemplazar NA con mediana
+      mutate_if(is.numeric, ~ replace(., is.na(.), median(., na.rm = TRUE))) %>%  # Reemplazar NA con mediana
+      mutate(
+             funding_rounds = factor(funding_rounds, levels = c("0","1", "2", "3", "4","5")),
+             profitable = factor(profitable, levels = c("0","1")),
+             year_founded = factor(year_founded)
+             )
   }
 
   if (proyecto == "Education Success") {

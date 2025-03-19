@@ -148,32 +148,34 @@ install.packages(c("tidyverse", "ggplot2", "dplyr", "readr"))
 
 ## Desglose del Proyecto *Oral Cancer Prediction*
 
-```bash 
-Proy_Oral_Cancer_Prediction/
-│── datasets/
-│   └── oral_cancer_prediction_dataset.csv         # Dataset principal
+## 📂 Estructura del Proyecto *Oral Cancer Prediction*
+
+```bash
+reportes/Proy_Oral_Cancer_Prediction/
+│── 00_CONFIGURACION.r                          # Archivo de configuración del proyecto
 │
-│── Matriz_Cov_Corr/                               # Archivos de correlación y covarianza
-│   └── Covarianza_Coef_Correlacion.pdf
+│── 01_Exploracion_datos.Rmd                    # Análisis Exploratorio de Datos (EDA)
+│── 01_Exploracion_datos.html                   # Versión HTML del análisis exploratorio
 │
-│── resultados_analisis_estadistico/               # Resultados del análisis estadístico
-│   ├── 1_summary_all_columns.txt
-│   └── 2_descr_all_columns.txt
+│── 02_Analisis_Estadistico.Rmd                 # Análisis estadístico detallado
+│── 02_Analisis_Estadistico.html                # Versión HTML del análisis estadístico
 │
-│── resultados_preprocesamiento/                   # Datos limpios y exploración inicial
-│   ├── estructura_oral_cancer_data.txt
-│   ├── head_oral_cancer_data.txt
-│   ├── na_oral_cancer_data.txt
-│   └── oral_cancer_data_limpio.csv
+│── 03_Analisis_Probabilidad.Rmd                # Análisis de probabilidad
+│── 03_Analisis_Probabilidad.html               # Versión HTML del análisis de probabilidad
 │
-│── resultados_probabilidad/                       # Resultados de análisis de probabilidad
-│   └── probabilidades_oral_cancer.txt
+│── README.md                                   # Documentación principal del proyecto
 │
-│── scripts/                                       # Scripts de análisis en R
-│   ├── 1_preprocesamiento_esp_dataset.r          # Preprocesamiento de datos
-│   ├── 2_analisis_estadistico_esp_graficos.r     # Análisis estadístico y visualización
-│   ├── 3_probabilidad.r                          # Modelos de probabilidad
-│   └── utils.R                                   # Funciones auxiliares
+│── resultados_generados/                       # Carpeta con gráficos generados
+│   ├── 1_categorical_variable_counts.txt       # Distribución de variables categóricas
+│   ├── barplot_country.png                     # Gráfico de barras por país
+│   ├── barplot_genero.png                      # Gráfico de barras por género
+│   ├── barplot_tabaco_genero.png               # Gráfico de barras consumo de tabaco por género
+│   ├── boxplot_edad.png                        # Boxplot de edad
+│   ├── boxplot_tumor_cancer_stage.png          # Boxplot tamaño de tumor por etapa del cáncer
+│   ├── histograma_edad_genero.png              # Histograma de edad por género
+│   ├── histograma_tamano_tumor.png             # Histograma tamaño del tumor
+│   ├── probabilidad_alcohol.png                # Cálculo de probabilidad con alcohol
+│   ├── probabilidad_tobacco.png                # Cálculo de probabilidad con tabaco
+│   ├── scatter_edad_tumor.png                  # Scatterplot edad vs tamaño del tumor
 │
-│── README.md                                     # Documentación principal
 ```

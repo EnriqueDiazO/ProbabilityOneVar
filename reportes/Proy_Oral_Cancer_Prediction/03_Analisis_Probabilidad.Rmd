@@ -22,20 +22,29 @@ Estos cálculos son clave para evaluar factores de riesgo y mejorar la toma de d
 
 2️⃣ Carga de Librerías y Configuración
 
+
 ```{r}
 # 📌 Cargar librerías necesarias
-library(here)           # Rutas dinámicas
+library(here)           # Manejo de rutas dinámicas
+library(janitor)        # Limpieza de nombres de columnas
+library(summarytools)   # Resumen estadístico detallado
+library(ggplot2)        # Gráficos
 library(dplyr)          # Manipulación de datos
-library(ggplot2)        # Visualización
-library(readr)          # Lectura de archivos CSV
-library(plotly)         # Gráficos interactivos
+library(plotly)         # Gŕaficos Interactivos
 
+# 📌 Configuración de gráficos globales
+theme_set(theme_minimal())
+source(here("reportes/Proy_Oral_Cancer_Prediction/00_CONFIGURACION.r"))
+
+# 📌 Cargar scripts de preprocesamiento
+source(here("scripts/utils.r"))
+source(here("scripts/1_preprocesamiento_esp_dataset.r"))
+source(here("scripts/3_analisis_probabilidad.r"))
+```
+
+```{r}
 # 📌 Cargar dataset limpio
-dataset_oral_cancer <- read_csv(
-  here("datasets/oral_cancer_data_limpio.csv"),
-  show_col_types = FALSE
-)
-
+dataset_oral_cancer <- preprocesar_datos(here("datasets/oral_cancer_data_limpio.csv"), "Oral Cancer")
 ```
 
 
@@ -46,34 +55,50 @@ Analizamos la relación entre factores de riesgo y diagnóstico temprano de cán
 
 ## 📌 Probabilidad de Diagnóstico Positivo dado que el Paciente Fuma
 ```{r}
+# Calcular probabilidades
+resultados_tobacco <- calcular_probabilidades(
+  data = dataset_oral_cancer,
+  condicionante = "tobacco_use",
+  objetivo = "early_diagnosis"
+)
 
-sub_tobacco <- dataset_oral_cancer %>%
-  filter(`Tobacco Use` == "Yes")
+# Mostrar resultados
+cat("Tabla de contingencia:\n")
+print(resultados_tobacco$tabla_contingencia)
 
-n_tobacco_total <- nrow(sub_tobacco)
-n_tobacco_malignant <- sub_tobacco %>%
-  filter(`Early Diagnosis` == "Yes") %>%
-  nrow()
+cat("\nProbabilidades condicionales:\n")
+print(resultados_tobacco$probabilidades_condicionales)
 
-p_malignant_given_tobacco <- n_tobacco_malignant / n_tobacco_total
-p_malignant_given_tobacco
+cat("\nProbabilidades marginales de early_diagnosis:\n")
+print(resultados_tobacco$probabilidades_marginales)
 
 ```
 
 
 ## 📌 Probabilidad de Diagnóstico Positivo dado que el Paciente Consume Alcohol
 ```{r}
-sub_alcohol <- dataset_oral_cancer %>%
-  filter(`Alcohol Consumption` == "Yes")
+# Calcular probabilidades para alcohol_consumption y early_diagnosis
+resultado_alcohol <- calcular_probabilidades(
+  data = dataset_oral_cancer,
+  condicionante = "alcohol_consumption",
+  objetivo = "early_diagnosis"
+)
 
-n_alcohol_total <- nrow(sub_alcohol)
-n_alcohol_malignant <- sub_alcohol %>%
-  filter(`Early Diagnosis` == "Yes") %>%
-  nrow()
+# Mostrar resultados
+cat("\nProbabilidad de diagnóstico positivo dado que el paciente consume alcohol:\n")
+prob_positivo_alcohol <- resultado_alcohol$probabilidades_condicionales %>%
+  filter(alcohol_consumption == "Yes", early_diagnosis == "Yes") %>%
+  pull(prob_condicional)
+print(prob_positivo_alcohol)
 
-p_malignant_given_alcohol <- n_alcohol_malignant / n_alcohol_total
-p_malignant_given_alcohol
+cat("\nTabla de contingencia para alcohol_consumption y early_diagnosis:\n")
+print(resultado_alcohol$tabla_contingencia)
 
+cat("\nProbabilidades condicionales:\n")
+print(resultado_alcohol$probabilidades_condicionales)
+
+cat("\nProbabilidades marginales de early_diagnosis:\n")
+print(resultado_alcohol$probabilidades_marginales)
 ```
 
 
@@ -83,35 +108,53 @@ p_malignant_given_alcohol
 Generamos gráficos interactivos para una mejor interpretación de los datos.
 
 ```{r}
-p_tobacco <- ggplot(dataset_oral_cancer, aes(x = `Tobacco Use`, fill = `Early Diagnosis`)) +
-  geom_bar(position = "fill") +
-  labs(title = "Probabilidad de Diagnóstico Temprano según Uso de Tabaco", 
-       x = "Uso de Tabaco", y = "Proporción", fill = "Diagnóstico") +
-  theme_minimal(base_size = 14)
+# Visualizar probabilidades condicionales
+p_tobacco <- visualizar_probabilidad_condicional(
+  data = dataset_oral_cancer,
+  condicionante = "tobacco_use",
+  objetivo = "early_diagnosis",
+  titulo = "Probabilidad de Diagnóstico Temprano según Uso de Tabaco",
+  xlab = "Uso de Tabaco",
+  guardar = TRUE,
+  ruta_guardado = here("reportes/Proy_Oral_Cancer_Prediction/resultados_generados/probabilidad_condicional_tobacco.png")
+)
 
-# Guardar gráfico
-ggsave(here("reportes/Proy_Oral_Cancer_Prediction/resultados_generados/probabilidad_tobacco.png"),
-       plot = p_tobacco, width = 8, height = 6, bg = "white")
-
-# Convertir en gráfico interactivo
-ggplotly(p_tobacco)
+# Mostrar gráfico interactivo
+p_tobacco
 
 ```
 
 
+```{r}
+# Visualizar probabilidades condicionales
+p_alcohol <- visualizar_probabilidad_condicional(
+  data = dataset_oral_cancer,
+  condicionante = "alcohol_consumption",
+  objetivo = "early_diagnosis",
+  titulo = "Probabilidad de Diagnóstico Temprano según Consumo de Alcohol",
+  xlab = "Consumo de Alcohol",
+  guardar = TRUE,
+  ruta_guardado = here("reportes/Proy_Oral_Cancer_Prediction/resultados_generados/probabilidad_condicional_alcohol.png")
+)
+
+# Mostrar gráfico interactivo
+p_alcohol
+
+```
+
 
 ```{r}
-p_alcohol <- ggplot(dataset_oral_cancer, aes(x = `Alcohol Consumption`, fill = `Early Diagnosis`)) +
-  geom_bar(position = "fill") +
-  labs(title = "Probabilidad de Diagnóstico Temprano según Consumo de Alcohol", 
-       x = "Consumo de Alcohol", y = "Proporción", fill = "Diagnóstico") +
-  theme_minimal(base_size = 14)
+p_tumors_vs_treatment <- visualizar_probabilidad_condicional(
+  data = dataset_oral_cancer,
+  condicionante = "treatment_type",
+  objetivo = "tumor_size_cm",
+  titulo = "Probabilidad tamaño del tumor según tratamiento ",
+  xlab = "Género",
+  guardar = TRUE,
+  ruta_guardado = here("reportes/Proy_Oral_Cancer_Prediction/resultados_generados/probabilidad_condicional_tumorsize_vs_treatment.png"),
+  bins = 5  # Dividir en 5 intervalos
+)
 
-# Guardar gráfico
-ggsave(here("reportes/Proy_Oral_Cancer_Prediction/resultados_generados/probabilidad_alcohol.png"),
-       plot = p_alcohol, width = 8, height = 6, bg = "white")
-
-# Convertir en gráfico interactivo
-ggplotly(p_alcohol)
-
+# Mostrar gráfico interactivo
+p_tumors_vs_treatment
 ```

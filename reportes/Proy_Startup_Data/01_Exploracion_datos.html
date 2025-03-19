@@ -11,7 +11,7 @@
 
 <meta name="author" content="Enrique Díaz Ocampo" />
 
-<meta name="date" content="2025-03-18" />
+<meta name="date" content="2025-03-19" />
 
 <title>Análisis Exploratorio de Datos</title>
 
@@ -352,32 +352,247 @@ display: none;
 
 <h1 class="title toc-ignore">Análisis Exploratorio de Datos</h1>
 <h4 class="author">Enrique Díaz Ocampo</h4>
-<h4 class="date">2025-03-18</h4>
+<h4 class="date">2025-03-19</h4>
 
 </div>
 
 
-<pre class="r"><code>#  Cargar configuración global
-#source(&quot;reportes/00_CONFIGURACION.r&quot;)
-library(here)
-library(janitor)
-source(here(&quot;reportes/Proy_Oral_Cancer_Prediction/00_CONFIGURACION.r&quot;))
+<div id="introducción" class="section level2">
+<h2>1️⃣ Introducción</h2>
+<p>Este documento presenta un <strong>Análisis Exploratorio de Datos
+(EDA)</strong> aplicado al dataset <em>Startup Data</em>.</p>
+<p>El objetivo es explorar aspectos clave del dataset, como:</p>
+<ul>
+<li><strong>Carga y preprocesamiento de datos</strong></li>
+<li><strong>Identificación de variables cuantitativas y
+cualitativas</strong></li>
+<li><strong>Resumen estadístico</strong></li>
+<li><strong>Distribución de variables categóricas</strong></li>
+<li><strong>Análisis descriptivo</strong></li>
+</ul>
+<p>Este análisis nos permitirá comprender la estructura y
+características del dataset antes de aplicar modelos de análisis
+avanzados.</p>
+<hr />
+</div>
+<div id="carga-de-librerías-y-configuración" class="section level2">
+<h2>2️⃣ Carga de Librerías y Configuración</h2>
+<pre class="r"><code># 📌 Cargar librerías necesarias
+library(here)           # Manejo de rutas dinámicas
+library(janitor)        # Limpieza de nombres de columnas
+library(summarytools)   # Resumen estadístico detallado
+library(ggplot2)        # Visualización de datos
+library(dplyr)          # Manipulación de datos
 
-#  Cargar scripts de preprocesamiento
+# 📌 Cargar configuración global
+# Contiene rutas de directorios, opciones de visualización y otros parámetros relevantes
+source(here(&quot;reportes/Proy_Startup_Data/00_CONFIGURACION.r&quot;))
+
+# 📌 Cargar scripts de preprocesamiento
+source(here(&quot;scripts/utils.r&quot;))
 source(here(&quot;scripts/1_preprocesamiento_esp_dataset.r&quot;))</code></pre>
-<pre class="r"><code># 📌 Ejemplo de uso en cada proyecto
-# Proyecto Oral Cancer
-dataset_oral_cancer &lt;- preprocesar_datos(here(&quot;datasets/oral_cancer_data_limpio.csv&quot;)
-, &quot;Oral Cancer&quot;)</code></pre>
-<pre><code>## 📥 Cargando datos del proyecto: Oral Cancer 
+<hr />
+</div>
+<div id="carga-y-preprocesamiento-de-datos" class="section level2">
+<h2>3️⃣ Carga y Preprocesamiento de Datos</h2>
+<p>📌 <strong>¿Qué hace esta función?</strong></p>
+<p>✔ Limpia los nombres de las columnas. ✔ Convierte variables
+categóricas en factores. ✔ Filtra valores inválidos. ✔ Retorna un
+dataset listo para análisis.</p>
+<pre class="r"><code># 📌 Cargar y preprocesar el dataset de Startup Data
+dataset_startup &lt;- preprocesar_datos(here(&quot;datasets/startup_data_limpio.csv&quot;), &quot;Startup Data&quot;)</code></pre>
+<pre><code>## 📥 Cargando datos del proyecto: Startup Data 
 ## 🧹 Realizando limpieza de datos...
-## 📊 Aplicando preprocesamiento específico para Oral Cancer...
-## ✅ Preprocesamiento completado para: Oral Cancer</code></pre>
-<pre class="r"><code># Proyecto Startup Data
-#dataset_startup &lt;- preprocesar_datos(&quot;datasets/startup_data.csv&quot;, &quot;Startup Data&quot;)
+## 📊 Aplicando preprocesamiento específico para Startup Data...
+## ✅ Preprocesamiento completado para: Startup Data</code></pre>
+<hr />
+</div>
+<div id="identificación-de-variables-cuantitativas-y-cualitativas" class="section level2">
+<h2>4️⃣ Identificación de Variables Cuantitativas y Cualitativas</h2>
+<p>📌 <strong>¿Por qué es importante?</strong></p>
+<p>✔ Nos ayuda a diferenciar entre datos numéricos (<em>ingresos,
+inversión, empleados</em>) y categóricos (<em>industria, país, estado de
+la startup</em>). ✔ Es clave para decidir qué análisis aplicar en cada
+tipo de variable.</p>
+<pre class="r"><code># 🔍 Identificación de variables cuantitativas y cualitativas
+variables_cuantitativas &lt;- dataset_startup %&gt;%
+  select(where(is.numeric)) %&gt;%
+  names()
 
-# Proyecto Education Success
-#dataset_education &lt;- preprocesar_datos(&quot;datasets/education_career_success.csv&quot;, &quot;Education Success&quot;)</code></pre>
+variables_cualitativas &lt;- dataset_startup %&gt;%
+  select(where(~ is.character(.) | is.factor(.))) %&gt;%
+  names()
+
+# Imprimir resultados
+cat(&quot;\n📊 **Variables Cuantitativas:**\n&quot;, paste(variables_cuantitativas, collapse = &quot;, &quot;), &quot;\n&quot;)</code></pre>
+<pre><code>## 
+## 📊 **Variables Cuantitativas:**
+##  funding_amount_m_usd, valuation_m_usd, revenue_m_usd, employees, market_share_percent</code></pre>
+<pre class="r"><code>cat(&quot;\n📊 **Variables Cualitativas:**\n&quot;, paste(variables_cualitativas, collapse = &quot;, &quot;), &quot;\n&quot;)</code></pre>
+<pre><code>## 
+## 📊 **Variables Cualitativas:**
+##  startup_name, industry, funding_rounds, profitable, year_founded, region, exit_status</code></pre>
+<hr />
+</div>
+<div id="resumen-estadístico-del-dataset" class="section level2">
+<h2>5️⃣ Resumen Estadístico del Dataset</h2>
+<p>📌 <strong>¿Qué nos dice esto?</strong></p>
+<p>✔ Muestra estadísticas generales como media, mediana, mínimos,
+máximos y percentiles. ✔ Nos ayuda a detectar valores atípicos y datos
+faltantes.</p>
+<pre class="r"><code># Resumen del dataset
+summary(dataset_startup)</code></pre>
+<pre><code>##       startup_name       industry   funding_rounds funding_amount_m_usd
+##  Startup_1  :  1   EdTech    : 74   0:  0          Min.   :  0.57      
+##  Startup_10 :  1   FinTech   : 71   1:109          1st Qu.: 79.21      
+##  Startup_100:  1   E-Commerce: 70   2: 97          Median :156.00      
+##  Startup_101:  1   AI        : 62   3:105          Mean   :152.66      
+##  Startup_102:  1   Gaming    : 62   4: 84          3rd Qu.:226.45      
+##  Startup_103:  1   IoT       : 61   5:105          Max.   :299.81      
+##  (Other)    :494   (Other)   :100                                      
+##  valuation_m_usd   revenue_m_usd     employees    market_share_percent
+##  Min.   :   2.43   Min.   : 0.12   Min.   :  12   Min.   : 0.100      
+##  1st Qu.: 557.03   1st Qu.:22.80   1st Qu.:1383   1st Qu.: 2.760      
+##  Median :1222.58   Median :48.80   Median :2496   Median : 5.135      
+##  Mean   :1371.81   Mean   :49.32   Mean   :2532   Mean   : 5.093      
+##  3rd Qu.:2052.09   3rd Qu.:74.97   3rd Qu.:3709   3rd Qu.: 7.553      
+##  Max.   :4357.49   Max.   :99.71   Max.   :4984   Max.   :10.000      
+##                                                                       
+##  profitable  year_founded           region      exit_status 
+##  0:284      2021   : 22   Asia         :103   Acquired:107  
+##  1:216      1993   : 21   Australia    :108   IPO     : 45  
+##             2003   : 21   Europe       :102   Private :348  
+##             2005   : 20   North America: 97                 
+##             2006   : 19   South America: 90                 
+##             2009   : 19                                     
+##             (Other):378</code></pre>
+<hr />
+</div>
+<div id="análisis-descriptivo-detallado" class="section level2">
+<h2>6️⃣ Análisis Descriptivo Detallado</h2>
+<p>📌 <strong>¿Por qué usar <code>descr()</code>?</strong></p>
+<p>✔ Genera estadísticas más detalladas que <code>summary()</code>,
+incluyendo frecuencias y desviaciones estándar. ✔ Permite explorar datos
+de forma más granular para detectar patrones.</p>
+<pre class="r"><code>descr(dataset_startup)</code></pre>
+<pre><code>## Descriptive Statistics  
+## dataset_startup  
+## N: 500  
+## 
+##                     employees   funding_amount_m_usd   market_share_percent   revenue_m_usd
+## ----------------- ----------- ---------------------- ---------------------- ---------------
+##              Mean     2532.09                 152.66                   5.09           49.32
+##           Std.Dev     1385.43                  86.68                   2.81           29.27
+##               Min       12.00                   0.57                   0.10            0.12
+##                Q1     1382.50                  78.96                   2.76           22.78
+##            Median     2496.50                 156.00                   5.14           48.80
+##                Q3     3710.50                 226.67                   7.56           74.98
+##               Max     4984.00                 299.81                  10.00           99.71
+##               MAD     1753.92                 108.39                   3.55           38.65
+##               IQR     2326.00                 147.24                   4.79           52.16
+##                CV        0.55                   0.57                   0.55            0.59
+##          Skewness       -0.05                  -0.09                  -0.04           -0.01
+##       SE.Skewness        0.11                   0.11                   0.11            0.11
+##          Kurtosis       -1.11                  -1.14                  -1.13           -1.24
+##           N.Valid      500.00                 500.00                 500.00          500.00
+##                 N      500.00                 500.00                 500.00          500.00
+##         Pct.Valid      100.00                 100.00                 100.00          100.00
+## 
+## Table: Table continues below
+## 
+##  
+## 
+##                     valuation_m_usd
+## ----------------- -----------------
+##              Mean           1371.81
+##           Std.Dev            978.23
+##               Min              2.43
+##                Q1            555.64
+##            Median           1222.58
+##                Q3           2052.50
+##               Max           4357.49
+##               MAD           1080.25
+##               IQR           1495.06
+##                CV              0.71
+##          Skewness              0.69
+##       SE.Skewness              0.11
+##          Kurtosis             -0.12
+##           N.Valid            500.00
+##                 N            500.00
+##         Pct.Valid            100.00</code></pre>
+<hr />
+</div>
+<div id="distribución-de-variables-categóricas" class="section level2">
+<h2>7️⃣ Distribución de Variables Categóricas</h2>
+<p>📌 <strong>¿Qué hace esta función?</strong></p>
+<p>✔ Calcula la frecuencia de cada categoría en variables como
+<em>Industria, Ubicación, Estado de la startup</em>. ✔ Guarda los
+resultados en el archivo:</p>
+<pre class="bash"><code>/Proy_Startup_Data/resultados_generados/1_categorical_variable_counts.txt</code></pre>
+<pre class="r"><code>save_categorical_counts(dataset_startup %&gt;% select(-startup_name),&quot;Proy_Startup_Data&quot;)</code></pre>
+<pre><code>## 
+## ------------------------------
+## 📊 Distribución de valores en: industry 
+## [[1]]
+## industry
+##            AI Cybersecurity    E-Commerce        EdTech       FinTech 
+##            62            51            70            74            71 
+##        Gaming    HealthTech           IoT 
+##            62            49            61 
+## 
+## 
+## ------------------------------
+## 📊 Distribución de valores en: funding_rounds 
+## [[1]]
+## funding_rounds
+##   0   1   2   3   4   5 
+##   0 109  97 105  84 105 
+## 
+## 
+## ------------------------------
+## 📊 Distribución de valores en: profitable 
+## [[1]]
+## profitable
+##   0   1 
+## 284 216 
+## 
+## 
+## ------------------------------
+## 📊 Distribución de valores en: year_founded 
+## [[1]]
+## year_founded
+## 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999 2000 2001 2002 2003 2004 2005 
+##   11   17   10   21   14   17   15   11   13   12   18   16   15   21   13   20 
+## 2006 2007 2008 2009 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020 2021 
+##   19   12   17   19    8   16   18   11   15   18   14   16   15   13   15   22 
+## 2022 
+##    8 
+## 
+## 
+## ------------------------------
+## 📊 Distribución de valores en: region 
+## [[1]]
+## region
+##          Asia     Australia        Europe North America South America 
+##           103           108           102            97            90 
+## 
+## 
+## ------------------------------
+## 📊 Distribución de valores en: exit_status 
+## [[1]]
+## exit_status
+## Acquired      IPO  Private 
+##      107       45      348</code></pre>
+<hr />
+</div>
+<div id="conclusión" class="section level2">
+<h2><strong>📌 Conclusión</strong></h2>
+<p>Este análisis exploratorio nos permite:</p>
+<p>✅ Identificar las principales características del dataset. ✅
+Diferenciar entre variables cuantitativas y cualitativas. ✅ Detectar
+valores atípicos y datos faltantes. ✅ Explorar patrones en los datos
+antes de aplicar modelos de predicción.</p>
+</div>
 
 
 

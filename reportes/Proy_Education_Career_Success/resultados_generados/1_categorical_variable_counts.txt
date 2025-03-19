@@ -1,0 +1,34 @@
+
+------------------------------
+📊 Distribución de valores en: gender 
+[[1]]
+gender
+Female   Male  Other 
+  2350   2458    192 
+
+
+------------------------------
+📊 Distribución de valores en: field_of_study 
+[[1]]
+field_of_study
+            Arts         Business Computer Science      Engineering 
+             749              719              670              701 
+             Law      Mathematics         Medicine 
+             727              745              689 
+
+
+------------------------------
+📊 Distribución de valores en: current_job_level 
+[[1]]
+current_job_level
+    Entry Executive       Mid    Senior 
+     2463       223      1544       770 
+
+
+------------------------------
+📊 Distribución de valores en: entrepreneurship 
+[[1]]
+entrepreneurship
+  No  Yes 
+3992 1008 
+

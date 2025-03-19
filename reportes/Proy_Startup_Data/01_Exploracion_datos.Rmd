@@ -2,43 +2,144 @@
 title: "Análisis Exploratorio de Datos"
 author: "Enrique Díaz Ocampo"
 date: "`r Sys.Date()`"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
-```{r}
-#  Cargar configuración global
-#source("reportes/00_CONFIGURACION.r")
-library(here)
-library(janitor)
-source(here("reportes/Proy_Oral_Cancer_Prediction/00_CONFIGURACION.r"))
+## 1️⃣ Introducción
 
-#  Cargar scripts de preprocesamiento
+Este documento presenta un **Análisis Exploratorio de Datos (EDA)** aplicado al dataset *Startup Data*.
+
+El objetivo es explorar aspectos clave del dataset, como:
+
+- **Carga y preprocesamiento de datos**
+- **Identificación de variables cuantitativas y cualitativas**
+- **Resumen estadístico**
+- **Distribución de variables categóricas**
+- **Análisis descriptivo**
+
+Este análisis nos permitirá comprender la estructura y características del dataset antes de aplicar modelos de análisis avanzados.
+
+---
+
+## 2️⃣ Carga de Librerías y Configuración
+
+```{r}
+# 📌 Cargar librerías necesarias
+library(here)           # Manejo de rutas dinámicas
+library(janitor)        # Limpieza de nombres de columnas
+library(summarytools)   # Resumen estadístico detallado
+library(ggplot2)        # Visualización de datos
+library(dplyr)          # Manipulación de datos
+
+# 📌 Cargar configuración global
+# Contiene rutas de directorios, opciones de visualización y otros parámetros relevantes
+source(here("reportes/Proy_Startup_Data/00_CONFIGURACION.r"))
+
+# 📌 Cargar scripts de preprocesamiento
 source(here("scripts/utils.r"))
 source(here("scripts/1_preprocesamiento_esp_dataset.r"))
+```
 
+---
 
+## 3️⃣ Carga y Preprocesamiento de Datos
+
+📌 **¿Qué hace esta función?**
+
+✔ Limpia los nombres de las columnas.
+✔ Convierte variables categóricas en factores.
+✔ Filtra valores inválidos.
+✔ Retorna un dataset listo para análisis.
+
+```{r}
+# 📌 Cargar y preprocesar el dataset de Startup Data
+dataset_startup <- preprocesar_datos(here("datasets/startup_data_limpio.csv"), "Startup Data")
+```
+
+---
+
+## 4️⃣ Identificación de Variables Cuantitativas y Cualitativas
+
+📌 **¿Por qué es importante?**
+
+✔ Nos ayuda a diferenciar entre datos numéricos (*ingresos, inversión, empleados*) y categóricos (*industria, país, estado de la startup*).
+✔ Es clave para decidir qué análisis aplicar en cada tipo de variable.
+
+```{r}
+# 🔍 Identificación de variables cuantitativas y cualitativas
+variables_cuantitativas <- dataset_startup %>%
+  select(where(is.numeric)) %>%
+  names()
+
+variables_cualitativas <- dataset_startup %>%
+  select(where(~ is.character(.) | is.factor(.))) %>%
+  names()
+
+# Imprimir resultados
+cat("\n📊 **Variables Cuantitativas:**\n", paste(variables_cuantitativas, collapse = ", "), "\n")
+cat("\n📊 **Variables Cualitativas:**\n", paste(variables_cualitativas, collapse = ", "), "\n")
+```
+
+---
+
+## 5️⃣ Resumen Estadístico del Dataset
+
+📌 **¿Qué nos dice esto?**
+
+✔ Muestra estadísticas generales como media, mediana, mínimos, máximos y percentiles.
+✔ Nos ayuda a detectar valores atípicos y datos faltantes.
+
+```{r}
+# Resumen del dataset
+summary(dataset_startup)
+```
+
+---
+
+## 6️⃣ Análisis Descriptivo Detallado
+
+📌 **¿Por qué usar `descr()`?**
+
+✔ Genera estadísticas más detalladas que `summary()`, incluyendo frecuencias y desviaciones estándar.
+✔ Permite explorar datos de forma más granular para detectar patrones.
+
+```{r}
+descr(dataset_startup)
+```
+
+---
+
+## 7️⃣ Distribución de Variables Categóricas
+
+📌 **¿Qué hace esta función?**
+
+✔ Calcula la frecuencia de cada categoría en variables como *Industria, Ubicación, Estado de la startup*.
+✔ Guarda los resultados en el archivo:
+
+```bash
+/Proy_Startup_Data/resultados_generados/1_categorical_variable_counts.txt
 ```
 
 ```{r}
-# 📌 Ejemplo de uso en cada proyecto
-# Proyecto Oral Cancer
-dataset_oral_cancer <- preprocesar_datos(here("datasets/oral_cancer_data_limpio.csv")
-, "Oral Cancer")
-
-# Proyecto Startup Data
-#dataset_startup <- preprocesar_datos("datasets/startup_data.csv", "Startup Data")
-
-# Proyecto Education Success
-#dataset_education <- preprocesar_datos("datasets/education_career_success.csv", "Education Success")
-
-
+save_categorical_counts(dataset_startup %>% select(-startup_name),"Proy_Startup_Data")
 ```
 
-```{r}
-save_categorical_counts(dataset_oral_cancer,"Proy_Oral_Cancer_Prediction")
+---
 
-```
+## **📌 Conclusión**
+
+Este análisis exploratorio nos permite:
+
+✅ Identificar las principales características del dataset.
+
+✅ Diferenciar entre variables cuantitativas y cualitativas.
+
+✅ Detectar valores atípicos y datos faltantes.
+
+✅ Explorar patrones en los datos antes de aplicar modelos de predicción.

@@ -1,0 +1,120 @@
+---
+title: "Análisis Exploratorio de Datos"
+author: "Enrique Díaz Ocampo"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## 1️⃣ **Introducción**
+Este documento presenta un **Análisis Exploratorio de Datos (EDA)** aplicado al dataset **Education Career Success**.
+Se exploran aspectos clave como:
+
+- Carga y preprocesamiento de datos.
+- Identificación de variables cuantitativas y cualitativas.
+- Resumen estadístico y análisis descriptivo.
+- Distribución de variables categóricas.
+- Visualización de datos clave.
+
+El objetivo es **comprender la estructura del dataset y detectar patrones** antes de aplicar modelos de análisis avanzados.
+
+---
+
+## 2️⃣ **Carga de Librerías y Configuración**
+```{r}
+# 📌 Cargar librerías necesarias
+library(here)           # Manejo de rutas dinámicas
+library(janitor)        # Limpieza de nombres de columnas
+library(summarytools)   # Resumen estadístico detallado
+library(ggplot2)        # Gráficos
+library(dplyr)          # Manipulación de datos
+
+# 📌 Cargar configuración global
+theme_set(theme_minimal())
+source(here("reportes/Proy_Education_Career_Success/00_CONFIGURACION.r"))
+
+# 📌 Cargar scripts de preprocesamiento
+source(here("scripts/utils.r"))
+source(here("scripts/1_preprocesamiento_esp_dataset.r"))
+```
+
+---
+
+## 3️⃣ **Carga y Preprocesamiento de Datos**
+```{r}
+# 📌 Cargar y preprocesar el dataset
+education_data <- preprocesar_datos(here("datasets/education_data_limpio.csv"), "Education Career Success")
+```
+📌 **¿Qué hace esta función?**
+✔ Limpia los nombres de las columnas.
+✔ Convierte variables categóricas en factores.
+✔ Filtra valores inválidos.
+✔ Retorna un dataset listo para análisis.
+
+---
+
+## 4️⃣ **Identificación de Variables Cuantitativas y Cualitativas**
+```{r}
+# 📊 Identificación de Tipos de Variables
+
+variables_cuantitativas <- education_data %>%
+  select(where(is.numeric)) %>%
+  names()
+
+variables_cualitativas <- education_data %>%
+  select(where(~ is.character(.) | is.factor(.))) %>%
+  names()
+
+# Imprimir resultados
+cat("\n📊 **Variables Cuantitativas:**\n", paste(variables_cuantitativas, collapse = ", "), "\n")
+cat("\n📊 **Variables Cualitativas:**\n", paste(variables_cualitativas, collapse = ", "), "\n")
+```
+📌 **Importancia:** Nos ayuda a diferenciar entre **datos numéricos** (años de estudio, salario) y **categóricos** (nivel educativo, industria de empleo).
+
+---
+
+## 5️⃣ Resumen Estadístico del Dataset
+
+📌 ¿Qué nos dice esto?
+
+✔ Muestra estadísticas generales como media, mediana, mínimos, máximos y percentiles.
+
+✔ Nos ayuda a detectar valores atípicos y datos faltantes.
+
+```{r}
+# Resumen del dataset
+summary(education_data)
+```
+
+## 6️⃣ Análisis Descriptivo Detallado
+
+📌 ¿Por qué usar descr()?
+
+✔ Genera estadísticas más detalladas que summary(), incluyendo frecuencias y desviaciones estándar.
+
+✔ Permite explorar datos de forma más granular para detectar patrones.
+
+```{r}
+descr(education_data) 
+```
+
+## 7️⃣ Distribución de Variables Categóricas
+
+📌 ¿Qué hace esta función?
+
+✔ Calcula la frecuencia de cada categoría en variables como Género, Consumo de Tabaco, Diagnóstico.
+
+✔ Guarda los resultados en el archivo:
+
+```bash
+/Proy_Education_Career_Success/resultados_generados/1_categorical_variable_counts.txt
+```
+
+```{r}
+save_categorical_counts(education_data %>% select(-student_id),"Proy_Education_Career_Success")
+```

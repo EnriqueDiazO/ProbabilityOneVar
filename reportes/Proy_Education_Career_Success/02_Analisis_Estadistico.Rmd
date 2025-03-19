@@ -1,0 +1,273 @@
+---
+title: "Guía de Gráficos para el Análisis Exploratorio de Datos (EDA)"
+author: "Enrique Díaz Ocampo"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+
+# 1️⃣ Introducción
+
+Esta guía proporciona una serie de gráficos para realizar un Análisis Exploratorio de Datos (EDA) en diferentes niveles:
+
+- Análisis Unidimensional: Distribución de una sola variable.
+
+- Análisis Multivariado: Relación entre dos o más variables.
+
+- Visualización con ggplot2 para explorar patrones en los datos.
+
+Esta guía te ayudará a seleccionar el gráfico más adecuado según el tipo de variable analizada.
+
+# 2️⃣ Carga de Librerías y Configuración
+```{r}
+#  Cargar librerías necesarias
+library(here)           # Manejo de rutas dinámicas
+library(janitor)        # Limpieza de nombres de columnas
+library(summarytools)   # Resumen estadístico detallado
+library(ggplot2)        # Gráficos
+library(dplyr)          # Manipulación de datos
+library(plotly)         # Gráficos Interactivos
+library(htmlwidgets)
+# Configuración de gráficos globales
+theme_set(theme_minimal())
+source(here("reportes/Proy_Education_Career_Success/00_CONFIGURACION.r"))
+
+# Cargar scripts de preprocesamiento
+source(here("scripts/utils.r"))
+source(here("scripts/1_preprocesamiento_esp_dataset.r"))
+source(here("scripts/2_analisis_gráfico.r"))
+
+```
+
+
+# 3️⃣ Carga y Preprocesamiento de Datos
+
+📌 ¿Qué hace esta función?
+
+✔ Limpia los nombres de las columnas.
+
+✔ Convierte variables categóricas en factores.
+
+✔ Filtra valores inválidos.
+
+✔ Retorna un dataset listo para análisis.
+
+```{r}
+# 📌 Cargar y preprocesar el dataset
+dataset_education <- preprocesar_datos(here("datasets/education_data_limpio.csv"), "Education Career Success")
+```
+
+# 4️⃣ Análisis Unidimensional
+
+El análisis unidimensional permite estudiar la distribución de una sola variable.
+
+## 📌 Boxplot para una variable cuantitativa (Edad)
+
+```{r}
+p_boxplot_edad <- crear_boxplot(
+  data = dataset_education,
+  y = "age",
+  title = "Distribución de la Edad de los Estudiantes",
+  xlab = "Estudiantes",
+  ylab = "Edad",
+  fill = NULL,
+  colores = "blue"
+)
+
+# Guardar y mostrar el gráfico
+guardar_grafico(p_boxplot_edad, here("reportes/Proy_Education_Career_Success/resultados_generados/boxplot_edad.png"))
+convertir_interactivo(p_boxplot_edad)
+
+```
+
+
+## 📌 Histograma para una variable cuantitativa (Edad)
+```{r}
+# Crear histograma usando la función genérica
+p_histograma_edad <- crear_histograma(
+  data = dataset_education,
+  x = "age",  # Variable a graficar
+  title = "Distribución de Edad de los Estudiantes",  # Título del gráfico
+  xlab = "Edad",  # Etiqueta del eje X
+  ylab = "Frecuencia",  # Etiqueta del eje Y
+  binwidth = 2,  # Ancho de los bins
+  colores = "lightblue",  # Color de relleno
+  densidad = TRUE  # Agregar línea de densidad
+)
+
+# Guardar el gráfico
+guardar_grafico(p_histograma_edad, here("reportes/Proy_Education_Career_Success/resultados_generados/histograma_edad.png"))
+
+# Convertir a gráfico interactivo
+convertir_interactivo(p_histograma_edad)
+
+```
+
+
+# 📌  Comparación entre histogramas 
+```{r}
+# Definir colores y etiquetas para la leyenda
+colores_genero <- c("Male" = "blue", "Female" = "red", "Other" = "cyan")
+etiquetas_leyenda <- c("Hombres", "Mujeres", "Otro")
+
+# Crear el histograma superpuesto
+p_salary_histogram <- crear_histograma_filtrado(
+  data = dataset_education,
+  filtro_columna = "field_of_study",
+  filtro_valor = "Mathematics",
+  x = "starting_salary",
+  fill = "gender",
+  title = "Distribución del Salario Inicial en Matemáticas" ,
+  xlab = "Salario Inicial (USD)",
+  ylab = "Frecuencia",
+  binwidth = 5000,
+  colores = colores_genero,
+  etiquetas_leyenda = etiquetas_leyenda
+)
+
+# Guardar el gráfico
+guardar_grafico(p_salary_histogram, here("reportes/Proy_Education_Career_Success/resultados_generados/histograma_salario_genero.png"))
+
+# Convertir a gráfico interactivo
+convertir_interactivo(p_salary_histogram)
+```
+
+
+
+📌 Barplot para una variable cualitativa (Campo de Estudio)
+
+```{r}
+# Crear el gráfico de barras apiladas y volteadas
+p_barplot_field <- crear_barplot(
+  data = dataset_education,
+  x = "field_of_study",  # Variable para el eje X
+  fill = "field_of_study",  # Variable para el fill
+  title = "Distribución de Campo de Estudio",  # Título del gráfico
+  xlab = "Campo de Estudio",  # Etiqueta del eje X
+  ylab = "Frecuencia",  # Etiqueta del eje Y
+  dodge = FALSE,  # Barras apiladas
+  voltear = TRUE,  # Voltear el gráfico
+  legend_position = "none"  # Ocultar la leyenda
+)
+
+# Guardar el gráfico
+guardar_grafico(p_barplot_field, here("reportes/Proy_Education_Career_Success/resultados_generados/barplot_field.png"))
+
+# Convertir a gráfico interactivo
+convertir_interactivo(p_barplot_field)
+
+```
+
+
+# 5️⃣ Análisis Multivariado
+
+El análisis multivariado permite explorar relaciones entre dos o más variables.
+
+📌 Cualitativa vs Cualitativa (Gráfico de barras cruzado)
+
+```{r}
+# Crear el gráfico de barras agrupadas
+p_genero_field <- crear_barplot(
+  data = dataset_education,
+  x = "gender",  # Variable para el eje X
+  fill = "field_of_study",  # Variable para el fill
+  title = "Distribución de Género por Campo de Estudio",  # Título del gráfico
+  xlab = "Género",  # Etiqueta del eje X
+  ylab = "Frecuencia",  # Etiqueta del eje Y
+  dodge = TRUE,  # Barras agrupadas
+  voltear = FALSE,  # No voltear el gráfico
+  legend_position = "right"  # Leyenda a la derecha
+)
+
+# Guardar el gráfico
+guardar_grafico(p_genero_field, here("reportes/Proy_Education_Career_Success/resultados_generados/barplot_genero_field.png"))
+
+# Convertir a gráfico interactivo
+convertir_interactivo(p_genero_field)
+```
+
+# 📌 Cuantitativa vs Cualitativa (Boxplot de GPA por Campo de Estudio)
+
+```{r}
+# Crear el gráfico de cajas
+p_salary_field <- crear_boxplot(
+  data = dataset_education,
+  x = "field_of_study",  # Variable para el eje X
+  y = "starting_salary",  # Variable para el eje Y
+  fill = "field_of_study",  # Variable para el fill
+  title = "Distribución del Salario Inicial por Campo de Estudio",  # Título del gráfico
+  xlab = "Campo de Estudio",  # Etiqueta del eje X
+  ylab = "Salario Inicial (USD)",  # Etiqueta del eje Y
+  fill_lab = "Campo de Estudio",  # Etiqueta de la leyenda
+  colores = NULL,  # Colores personalizados (opcional)
+  rotar_x = TRUE  # Rotar etiquetas del eje X
+) +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1, size = 14),  # Rotar etiquetas del eje X
+    legend.position = "none"  # Ocultar la leyenda
+  )
+
+# Guardar el gráfico
+guardar_grafico(p_salary_field, here("reportes/Proy_Education_Career_Success/resultados_generados/boxplot_salary_field.png"))
+
+# Convertir a gráfico interactivo
+convertir_interactivo(p_salary_field)
+
+```
+
+```{r}
+# Definir colores personalizados para género
+colores_genero <- c("Female" = "#E74C3C", "Male" = "#2980B9", "Other" = "#27AE60")
+
+# Crear el gráfico interactivo
+p_interactive <- crear_boxplot_interactivo(
+  data = dataset_education,
+  x = "field_of_study",  # Variable para el eje X
+  y = "starting_salary",  # Variable para el eje Y
+  color = "gender",  # Variable para el color (género)
+  colores = colores_genero,  # Colores personalizados
+  title = "Distribución del Salario Inicial por Campo de Estudio y Género",  # Título del gráfico
+  xlab = "Campo de Estudio",  # Etiqueta del eje X
+  ylab = "Salario Inicial (USD)",  # Etiqueta del eje Y
+  tickangle = -45  # Rotar etiquetas del eje X
+)
+
+# Mostrar el gráfico interactivo
+p_interactive
+
+
+```
+
+# 📌 Cuantitativa vs Cuantitativa (Diagrama de dispersión entre SAT Score y University GPA)
+
+```{r}
+p_sat_gpa <- crear_scatterplot(
+  data = dataset_education,
+  x = "sat_score",
+  y = "university_gpa",
+  title = "Relación entre SAT Score y GPA Universitario",
+  xlab = "SAT Score",
+  ylab = "GPA Universitario",
+  color = NULL,
+  colores = "steelblue"
+) +
+  theme_classic(base_size = 16) +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
+    axis.title = element_text(size = 16, face = "bold"),
+    axis.text = element_text(size = 14)
+  )
+
+
+ggsave(here("reportes/Proy_Education_Career_Success/resultados_generados/scatter_sat_gpa.png"), 
+       plot = p_sat_gpa, width = 8, height = 6, bg = "white")
+
+ggplotly(p_sat_gpa)
+
+```

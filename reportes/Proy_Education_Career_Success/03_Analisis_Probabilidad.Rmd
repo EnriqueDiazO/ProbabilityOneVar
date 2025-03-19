@@ -1,0 +1,135 @@
+---
+title: "Cálculo de Probabilidades en Career Success"
+author: "Enrique Díaz Ocampo"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+# 1️⃣ Introducción
+
+Este análisis tiene como objetivo calcular probabilidades condicionales en el dataset de "Career Success", respondiendo preguntas como:
+
+- ¿Cuál es la probabilidad de tener éxito en la carrera si el individuo tiene un alto nivel de educación?
+
+- ¿Cómo influye la experiencia laboral en el éxito profesional?
+
+Estos cálculos son clave para evaluar factores que contribuyen al éxito profesional y mejorar la toma de decisiones en la planificación de carreras.
+
+
+# 2️⃣ Carga de Librerías y Configuración
+
+```{r}
+# 📌 Cargar librerías necesarias
+library(here)           # Manejo de rutas dinámicas
+library(janitor)        # Limpieza de nombres de columnas
+library(summarytools)   # Resumen estadístico detallado
+library(ggplot2)        # Gráficos
+library(dplyr)          # Manipulación de datos
+library(plotly)         # Gráficos Interactivos
+
+# 📌 Configuración de gráficos globales
+theme_set(theme_minimal())
+source(here("reportes/Proy_Education_Career_Success/00_CONFIGURACION.r"))
+
+# 📌 Cargar scripts de preprocesamiento
+source(here("scripts/utils.r"))
+source(here("scripts/1_preprocesamiento_esp_dataset.r"))
+source(here("scripts/3_analisis_probabilidad.r"))
+```
+
+
+```{r}
+# 📌 Cargar dataset limpio
+dataset_career_success <- preprocesar_datos(here("datasets/education_data_limpio.csv"), "Education Career Success")
+```
+
+
+
+3️⃣ Cálculo de Probabilidades Condicionales
+
+Analizamos la relación entre factores de éxito y el éxito profesional.
+
+📌 Probabilidad de Éxito Profesional dado un Alto Nivel de Educación
+
+```{r}
+# Calcular probabilidades
+resultados_university_vs_satisfaction <- calcular_probabilidades(
+  data = dataset_career_success,
+  condicionante = "university_ranking",
+  objetivo = "career_satisfaction",
+  bins = 5  # Dividir en 5 intervalos
+)
+
+# Mostrar resultados
+cat("Tabla de contingencia:\n")
+print(resultados_university_vs_satisfaction$tabla_contingencia)
+
+cat("\nProbabilidades condicionales:\n")
+print(resultados_university_vs_satisfaction$probabilidades_condicionales)
+
+cat("\nProbabilidades marginales de career_success:\n")
+print(resultados_university_vs_satisfaction$probabilidades_marginales)
+```
+
+
+```{r}
+resultados_gender_vs_salary <- calcular_probabilidades(
+  data = dataset_career_success,
+  condicionante = "gender",
+  objetivo = "starting_salary",
+  bins = 5  # Dividir en 5 intervalos
+)
+
+# Mostrar resultados
+cat("Tabla de contingencia:\n")
+print(resultados_gender_vs_salary$tabla_contingencia)
+
+cat("\nProbabilidades condicionales:\n")
+print(resultados_gender_vs_salary$probabilidades_condicionales)
+
+cat("\nProbabilidades marginales de career_success:\n")
+print(resultados_gender_vs_salary$probabilidades_marginales)
+```
+
+4️⃣ Visualización de Resultados
+
+📌 Gráfico de Probabilidad de Satisfacción Laboral según el Ranking de la Universidad
+```{r}
+p_university_vs_satisfaction <- visualizar_probabilidad_condicional(
+  data = dataset_career_success,
+  condicionante = "university_ranking",
+  objetivo = "career_satisfaction",
+  titulo = "Probabilidad  Satisfacción Laboral según Ranking de la Universidad",
+  xlab = "Ranking de la Universidad (Intervalos)",
+  guardar = TRUE,
+  ruta_guardado = here("reportes/Proy_Education_Career_Success/resultados_generados/probabilidad_condicional_university_vs_satisfaction.png"),
+  bins = 5  # Dividir en 5 intervalos
+)
+
+# Mostrar gráfico interactivo
+p_university_vs_satisfaction
+```
+
+
+
+```{r}
+p_gender_vs_salary <- visualizar_probabilidad_condicional(
+  data = dataset_career_success,
+  condicionante = "gender",
+  objetivo = "starting_salary",
+  titulo = "Probabilidad  Salario inicial según Género",
+  xlab = "Género",
+  guardar = TRUE,
+  ruta_guardado = here("reportes/Proy_Education_Career_Success/resultados_generados/probabilidad_condicional_gender_vs_salary.png"),
+  bins = 5  # Dividir en 5 intervalos
+)
+
+# Mostrar gráfico interactivo
+p_gender_vs_salary
+```

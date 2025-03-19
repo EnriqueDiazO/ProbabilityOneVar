@@ -1,102 +1,84 @@
-# 📊 Análisis Exploratorio de Datos y Probabilidad en Conjuntos de Datos
+# 📊 Análisis Exploratorio y Probabilidad en *Startup Data*
 
-Este repositorio contiene diversos proyectos en los que se aplican **análisis exploratorio de datos (EDA)** y **conceptos de probabilidad** a diferentes conjuntos de datos. A través de estos ejemplos, se ilustran métodos estadísticos fundamentales y técnicas para analizar distribuciones de datos en múltiples dominios.
-
----
-
-## 📌 Contenido del Repositorio
-
-🔹 **[`Proyecto_Salarios_Precios`](./Proyecto_Salarios_Precios)**  
-&nbsp;&nbsp;&nbsp;&nbsp;📌 Análisis de salarios y precios históricos.  
-&nbsp;&nbsp;&nbsp;&nbsp;📊 Histogramas y preprocesamiento de datos.  
-
-🔹 **[`Proy_Education_Career_Success`](./Proy_Education_Career_Success)**  
-&nbsp;&nbsp;&nbsp;&nbsp;🎓 Relación entre educación y éxito profesional.  
-&nbsp;&nbsp;&nbsp;&nbsp;📈 Covarianza, correlación y estadísticas descriptivas.  
-
-🔹 **[`Proy_Oral_Cancer_Prediction`](./Proy_Oral_Cancer_Prediction)**  
-&nbsp;&nbsp;&nbsp;&nbsp;🩺 Predicción de cáncer oral con variables de riesgo.  
-&nbsp;&nbsp;&nbsp;&nbsp;📊 Probabilidades, análisis estadístico y visualizaciones.  
-
-🔹 **[`Proy_Startup_Data`](./Proy_Startup_Data)**  
-&nbsp;&nbsp;&nbsp;&nbsp;🚀 Análisis de datos de startups.  
-&nbsp;&nbsp;&nbsp;&nbsp;📊 Evaluación de patrones de crecimiento y éxito empresarial.  
-
-Cada proyecto contiene:
-- **Datasets originales y preprocesados** 📂
-- **Scripts en R para análisis y visualización** 🖥️
-- **Gráficos y reportes de resultados** 📊
-- **Documentación detallada** 📝
+Este repositorio contiene un análisis detallado del conjunto de datos **Startup Data**, el cual explora factores clave en el éxito de startups.  
+El objetivo principal del análisis es identificar patrones en la industria, financiamiento, métricas de crecimiento y factores que determinan la rentabilidad y el éxito de una startup.
 
 ---
 
-## 🎲 Conceptos de Probabilidad Aplicada
+## 📌 Descripción del Dataset
 
-En este repositorio se abordan conceptos fundamentales de probabilidad, incluyendo:
-
-✅ **Variables Aleatorias**  
-&nbsp;&nbsp;&nbsp;&nbsp;🎯 Discretas y continuas.  
-&nbsp;&nbsp;&nbsp;&nbsp;📏 Funciones de densidad y distribución acumulada.  
-
-✅ **Estadísticas Descriptivas**  
-&nbsp;&nbsp;&nbsp;&nbsp;📊 Media, mediana, moda, varianza y desviación estándar.  
-
-✅ **Probabilidad Condicional**  
-&nbsp;&nbsp;&nbsp;&nbsp;📌 Tablas de contingencia y teorema de Bayes.  
-
-✅ **Modelos Probabilísticos**  
-&nbsp;&nbsp;&nbsp;&nbsp;📈 Distribuciones normales, binomiales y de Poisson.  
+El dataset incluye información sobre la industria, número de empleados, inversión recibida, ingresos, valoración de la empresa y su estado de salida del mercado (*exit status*).  
+Para facilitar su análisis, las variables han sido agrupadas en las siguientes categorías:
 
 ---
 
-## 📊 Análisis Exploratorio de Datos (EDA)
+## **1️⃣ Información General de la Startup**  
+📌 Información básica sobre cada startup en el dataset.
 
-El **Análisis Exploratorio de Datos** es clave para entender la estructura de un dataset antes de aplicar modelos estadísticos.  
-Este repositorio cubre:
-
-📌 **Información básica de un dataset**  
-📊 **Análisis Unidimensional**  
-&nbsp;&nbsp;&nbsp;&nbsp;- Distribuciones de variables cuantitativas.  
-&nbsp;&nbsp;&nbsp;&nbsp;- Frecuencias y gráficos para variables cualitativas.  
-
-📉 **Análisis Multidimensional**  
-&nbsp;&nbsp;&nbsp;&nbsp;📌 Relaciones entre variables cuantitativas y cualitativas.  
-&nbsp;&nbsp;&nbsp;&nbsp;📊 Diagramas de dispersión, boxplots y correlaciones.  
-
-📢 **Visualización de Datos**  
-📈 Histogramas, diagramas de dispersión, heatmaps y más.  
-
-![Diagrama General del Análisis Exploratorio de Datos (EDA)](https://github.com/EnriqueDiazO/ProbabilityOneVar/blob/main/images/Diagrama%20EDA%20en%20R.png)
+| **Variable** | **Descripción** |**Tipo**|**Rango de Valores**|
+|-------------|----------------|-------------|----------------|
+| `startup_name` | Nombre de la startup | Categórica | Variado |
+| `industry` | Sector de la industria al que pertenece la startup | Categórica | EdTech, FinTech, AI, E-Commerce, Gaming, IoT, etc. |
+| `year_founded` | Año en que se fundó la startup | Numérica | 1990 - 2023 |
+| `region` | Región geográfica de operación principal | Categórica | Asia, Australia, Europa, Norteamérica, Sudamérica |
 
 ---
 
-## 🚀 Cómo Usar Este Repositorio
+## **2️⃣ Financiamiento y Valoración**  
+📌 Factores relacionados con la inversión en la startup y su valoración en el mercado.
 
-### 🔹 Requisitos Previos
-Para ejecutar los scripts y reproducir los análisis, necesitarás:
+| **Variable** | **Descripción** | **Tipo** | **Rango de Valores** |
+|-------------|----------------|----------|----------------------|
+| `funding_rounds` | Número de rondas de financiamiento recibidas | Categórica | 1 - 5 |
+| `funding_amount_m_usd` | Monto total de financiamiento recibido (millones USD) | Numérica | 0.57 - 299.81 |
+| `valuation_m_usd` | Valoración de la startup en el mercado (millones USD) | Numérica | 2.43 - 4,357.49 |
 
-- R y RStudio 🔹 [Descargar aquí](https://posit.co/download/rstudio-desktop/)
-- Librerías de R como `tidyverse`, `ggplot2` y `dplyr`. Puedes instalarlas con:
+---
 
-  ```r
-  install.packages(c("tidyverse", "ggplot2", "dplyr"))
-  ```
-  
-### 🔹 Uso de Scripts
+## **3️⃣ Crecimiento y Operación**  
+📌 Métricas relacionadas con el crecimiento de la startup y su desempeño en el mercado.
 
-Cada carpeta contiene un conjunto de scripts en R con análisis específicos.
-  
-  ```r
-  source("scripts/preprocesamiento.r")
-  source("scripts/analisis_estadistico.r")
-  source("scripts/probabilidad.r")
-  ```
+| **Variable** | **Descripción** | **Tipo** | **Rango de Valores** |
+|-------------|----------------|----------|----------------------|
+| `employees` | Número de empleados en la startup | Numérica | 12 - 4,984 |
+| `market_share_percent` | Porcentaje de mercado capturado | Numérica | 0.1 - 10.0 |
 
-📬 Contacto
+---
 
-Si tienes dudas o sugerencias, ¡no dudes en contactarme!
-📧 Correo: doeo113900@gmail.com
-🐦 Twitter: @EnriqueDiazOca1
-💼 LinkedIn: linkedin.com/in/enrique-diaz-ocampo-2377121a4/
+## **4️⃣ Desempeño Financiero**  
+📌 Factores clave sobre la rentabilidad y los ingresos de la startup.
 
+| **Variable** | **Descripción** | **Tipo** | **Rango de Valores** |
+|-------------|----------------|----------|----------------------|
+| `revenue_m_usd` | Ingresos anuales generados por la startup (millones USD) | Numérica | 0.12 - 99.71 |
+| `profitable` | Indica si la startup es rentable | Categórica | Yes (1)/ No (0) |
 
+---
+
+## **5️⃣ Factores de Éxito y Estado de Salida**  
+📌 Variables que determinan si la startup tuvo éxito y cómo terminó su participación en el mercado.
+
+| **Variable** | **Descripción** | **Tipo** | **Rango de Valores** |
+|-------------|----------------|----------|----------------------|
+| `exit_status` | Estado final de la startup en el mercado | Categórica | Acquired, IPO, Private |
+
+---
+
+## 🔬 Objetivos del Análisis
+
+El análisis del dataset busca responder las siguientes preguntas:
+
+1️⃣ **Factores de Éxito**: ¿Qué características diferencian a una startup exitosa de una que fracasa?  
+2️⃣ **Importancia del Financiamiento**: ¿Cómo afecta la inversión inicial al crecimiento y rentabilidad de la startup?  
+3️⃣ **Industria y Crecimiento**: ¿Cuáles son los sectores con mayores tasas de éxito?  
+4️⃣ **Región y Rentabilidad**: ¿Existen diferencias en el desempeño de startups según la región donde operan?  
+5️⃣ **Desempeño Financiero**: ¿Cómo se relacionan ingresos, rentabilidad y valoración de la startup?  
+
+---
+
+## 🛠️ Requisitos para Ejecutar el Análisis
+
+Para replicar el análisis, asegúrate de tener **R y RStudio** instalados, junto con las siguientes librerías:
+
+```r
+install.packages(c("tidyverse", "ggplot2", "dplyr", "readr"))
