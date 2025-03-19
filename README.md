@@ -6,7 +6,7 @@ Este repositorio contiene diversos proyectos en los que se aplican **análisis e
 
 ## 📌 Contenido del Repositorio
 
-🔹 **[`Proyecto_Salarios_Precios`](./reportes/Proyecto_Salarios)**  
+🔹 **[`Proyecto_Salarios_Precios`](./reportes/Proy_Salarios)**  
 &nbsp;&nbsp;&nbsp;&nbsp;📌 Análisis de salarios y precios históricos.  
 &nbsp;&nbsp;&nbsp;&nbsp;📊 Histogramas y preprocesamiento de datos.  
 

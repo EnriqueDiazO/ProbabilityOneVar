@@ -30,16 +30,21 @@ Este análisis nos permitirá comprender la estructura y características del da
 ## 2️⃣ Carga de Librerías y Configuración
 
 ```{r}
+# 📌 Cargar configuración global
+# Contiene rutas de directorios, opciones de visualización y otros parámetros relevantes
+install.packages("here",dependencies=TRUE)
+library(here)
+source(here("reportes/Proy_Startup_Data/00_CONFIGURACION.r"))
+```
+
+```{r}
 # 📌 Cargar librerías necesarias
-library(here)           # Manejo de rutas dinámicas
+
 library(janitor)        # Limpieza de nombres de columnas
 library(summarytools)   # Resumen estadístico detallado
 library(ggplot2)        # Visualización de datos
 library(dplyr)          # Manipulación de datos
 
-# 📌 Cargar configuración global
-# Contiene rutas de directorios, opciones de visualización y otros parámetros relevantes
-source(here("reportes/Proy_Startup_Data/00_CONFIGURACION.r"))
 
 # 📌 Cargar scripts de preprocesamiento
 source(here("scripts/utils.r"))

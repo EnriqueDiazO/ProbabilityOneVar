@@ -11,7 +11,7 @@
 
 <meta name="author" content="Enrique Díaz Ocampo" />
 
-<meta name="date" content="2025-03-18" />
+<meta name="date" content="2025-03-19" />
 
 <title>Análisis Exploratorio de Datos</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">Análisis Exploratorio de Datos</h1>
 <h4 class="author">Enrique Díaz Ocampo</h4>
-<h4 class="date">2025-03-18</h4>
+<h4 class="date">2025-03-19</h4>
 
 </div>
 
@@ -370,15 +370,18 @@ como:</p>
 </ul>
 <p>El objetivo es entender la estructura y características del dataset
 antes de aplicar modelos de análisis avanzados.</p>
+<pre class="r"><code># 📌 Cargar configuración global
+# Contiene rutas de directorios, opciones de visualización y otros parámetros relevantes
+install.packages(&quot;here&quot;,dependencies=TRUE)
+library(here)
+source(here(&quot;reportes/Proy_Oral_Cancer_Prediction/00_CONFIGURACION.r&quot;))</code></pre>
 <pre class="r"><code># 📌 Cargar librerías necesarias
 library(here)           # Manejo de rutas dinámicas
 library(janitor)        # Limpieza de nombres de columnas
 library(summarytools)   # Resumen estadístico detallado
 
-# 📌 Cargar configuración global y funciones personalizadas
-source(here(&quot;reportes/Proy_Oral_Cancer_Prediction/00_CONFIGURACION.r&quot;))
-
-# 📌 Cargar scripts de preprocesamiento y utilidades
+# 📌 Cargar scripts de preprocesamiento
+# Se cargan funciones auxiliares y se ejecuta el preprocesamiento de datos
 source(here(&quot;scripts/utils.r&quot;))
 source(here(&quot;scripts/1_preprocesamiento_esp_dataset.r&quot;))</code></pre>
 <p>3️⃣ Carga y Preprocesamiento de Datos</p>

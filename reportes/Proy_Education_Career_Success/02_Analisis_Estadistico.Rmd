@@ -26,8 +26,13 @@ Esta guía te ayudará a seleccionar el gráfico más adecuado según el tipo de
 
 # 2️⃣ Carga de Librerías y Configuración
 ```{r}
-#  Cargar librerías necesarias
+install.packages("here",dependencies = TRUE)
 library(here)           # Manejo de rutas dinámicas
+source(here("reportes/Proy_Education_Career_Success/00_CONFIGURACION.r"))
+```
+
+```{r}
+#  Cargar librerías necesarias
 library(janitor)        # Limpieza de nombres de columnas
 library(summarytools)   # Resumen estadístico detallado
 library(ggplot2)        # Gráficos
@@ -36,7 +41,6 @@ library(plotly)         # Gráficos Interactivos
 library(htmlwidgets)
 # Configuración de gráficos globales
 theme_set(theme_minimal())
-source(here("reportes/Proy_Education_Career_Success/00_CONFIGURACION.r"))
 
 # Cargar scripts de preprocesamiento
 source(here("scripts/utils.r"))

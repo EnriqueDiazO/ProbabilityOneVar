@@ -22,6 +22,13 @@ Estos cálculos son clave para evaluar factores de riesgo y mejorar la toma de d
 
 2️⃣ Carga de Librerías y Configuración
 
+```{r}
+# 📌 Cargar configuración global
+# Contiene rutas de directorios, opciones de visualización y otros parámetros relevantes
+install.packages("here",dependencies=TRUE)
+library(here)
+source(here("reportes/Proy_Oral_Cancer_Prediction/00_CONFIGURACION.r"))
+```
 
 ```{r}
 # 📌 Cargar librerías necesarias
@@ -34,7 +41,6 @@ library(plotly)         # Gŕaficos Interactivos
 
 # 📌 Configuración de gráficos globales
 theme_set(theme_minimal())
-source(here("reportes/Proy_Oral_Cancer_Prediction/00_CONFIGURACION.r"))
 
 # 📌 Cargar scripts de preprocesamiento
 source(here("scripts/utils.r"))

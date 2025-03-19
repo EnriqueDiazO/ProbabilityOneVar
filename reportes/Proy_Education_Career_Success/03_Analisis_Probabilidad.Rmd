@@ -23,10 +23,16 @@ Estos cálculos son clave para evaluar factores que contribuyen al éxito profes
 
 
 # 2️⃣ Carga de Librerías y Configuración
+```{r}
+install.packages("here",dependencies = TRUE)
+library(here)           # Manejo de rutas dinámicas
+source(here("reportes/Proy_Education_Career_Success/00_CONFIGURACION.r"))
+```
+
 
 ```{r}
 # 📌 Cargar librerías necesarias
-library(here)           # Manejo de rutas dinámicas
+
 library(janitor)        # Limpieza de nombres de columnas
 library(summarytools)   # Resumen estadístico detallado
 library(ggplot2)        # Gráficos
@@ -35,7 +41,7 @@ library(plotly)         # Gráficos Interactivos
 
 # 📌 Configuración de gráficos globales
 theme_set(theme_minimal())
-source(here("reportes/Proy_Education_Career_Success/00_CONFIGURACION.r"))
+
 
 # 📌 Cargar scripts de preprocesamiento
 source(here("scripts/utils.r"))

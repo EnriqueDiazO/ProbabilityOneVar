@@ -376,8 +376,10 @@ avanzados.</p>
 </div>
 <div id="carga-de-librerías-y-configuración" class="section level2">
 <h2>2️⃣ <strong>Carga de Librerías y Configuración</strong></h2>
-<pre class="r"><code># 📌 Cargar librerías necesarias
+<pre class="r"><code>install.packages(&quot;here&quot;,dependencies = TRUE)
 library(here)           # Manejo de rutas dinámicas
+source(here(&quot;reportes/Proy_Education_Career_Success/00_CONFIGURACION.r&quot;))</code></pre>
+<pre class="r"><code># 📌 Cargar librerías necesarias
 library(janitor)        # Limpieza de nombres de columnas
 library(summarytools)   # Resumen estadístico detallado
 library(ggplot2)        # Gráficos
@@ -385,7 +387,6 @@ library(dplyr)          # Manipulación de datos
 
 # 📌 Cargar configuración global
 theme_set(theme_minimal())
-source(here(&quot;reportes/Proy_Education_Career_Success/00_CONFIGURACION.r&quot;))
 
 # 📌 Cargar scripts de preprocesamiento
 source(here(&quot;scripts/utils.r&quot;))

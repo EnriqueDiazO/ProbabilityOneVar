@@ -29,16 +29,20 @@ Se exploran aspectos clave como:
 El objetivo es entender la estructura y características del dataset antes de aplicar modelos de análisis avanzados.
 
 
+
+```{r}
+# 📌 Cargar configuración global
+# Contiene rutas de directorios, opciones de visualización y otros parámetros relevantes
+install.packages("here",dependencies=TRUE)
+library(here)
+source(here("reportes/Proy_Oral_Cancer_Prediction/00_CONFIGURACION.r"))
+```
+
 ```{r}
 # 📌 Cargar librerías necesarias
 library(here)           # Manejo de rutas dinámicas
 library(janitor)        # Limpieza de nombres de columnas
 library(summarytools)   # Resumen estadístico detallado
-
-# 📌 Cargar configuración global
-# Este archivo contiene configuraciones generales, como 
-# rutas de directorios, opciones de visualización y otros parámetros relevantes.
-source(here("reportes/Proy_Oral_Cancer_Prediction/00_CONFIGURACION.r"))
 
 # 📌 Cargar scripts de preprocesamiento
 # Se cargan funciones auxiliares y se ejecuta el preprocesamiento de datos
