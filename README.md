@@ -6,26 +6,30 @@ Este repositorio contiene diversos proyectos en los que se aplican **análisis e
 
 ## 📌 Contenido del Repositorio
 
-🔹 **[`Proyecto_Salarios_Precios`](./Proyecto_Salarios_Precios)**  
+🔹 **[`Proyecto_Salarios_Precios`](./reportes/Proyecto_Salarios)**  
 &nbsp;&nbsp;&nbsp;&nbsp;📌 Análisis de salarios y precios históricos.  
 &nbsp;&nbsp;&nbsp;&nbsp;📊 Histogramas y preprocesamiento de datos.  
 
-🔹 **[`Proy_Education_Career_Success`](./Proy_Education_Career_Success)**  
+🔹 **[`Proy_Education_Career_Success`](./reportes/Proy_Education_Career_Success)**  
 &nbsp;&nbsp;&nbsp;&nbsp;🎓 Relación entre educación y éxito profesional.  
 &nbsp;&nbsp;&nbsp;&nbsp;📈 Covarianza, correlación y estadísticas descriptivas.  
 
-🔹 **[`Proy_Oral_Cancer_Prediction`](./Proy_Oral_Cancer_Prediction)**  
+🔹 **[`Proy_Oral_Cancer_Prediction`](./reportes/Proy_Oral_Cancer_Prediction)**  
 &nbsp;&nbsp;&nbsp;&nbsp;🩺 Predicción de cáncer oral con variables de riesgo.  
 &nbsp;&nbsp;&nbsp;&nbsp;📊 Probabilidades, análisis estadístico y visualizaciones.  
 
-🔹 **[`Proy_Startup_Data`](./Proy_Startup_Data)**  
+🔹 **[`Proy_Startup_Data`](./reportes/Proy_Startup_Data)**  
 &nbsp;&nbsp;&nbsp;&nbsp;🚀 Análisis de datos de startups.  
 &nbsp;&nbsp;&nbsp;&nbsp;📊 Evaluación de patrones de crecimiento y éxito empresarial.  
 
 Cada proyecto contiene:
+
 - **Datasets originales y preprocesados** 📂
+
 - **Scripts en R para análisis y visualización** 🖥️
+
 - **Gráficos y reportes de resultados** 📊
+
 - **Documentación detallada** 📝
 
 ---
@@ -87,16 +91,19 @@ Para ejecutar los scripts y reproducir los análisis, necesitarás:
 Cada carpeta contiene un conjunto de scripts en R con análisis específicos.
   
   ```r
-  source("scripts/preprocesamiento.r")
-  source("scripts/analisis_estadistico.r")
-  source("scripts/probabilidad.r")
+  source("scripts/1_preprocesamiento_esp_dataset.r")
+  source("scripts/2_analisis_gráfico.r")
+  source("scripts/3_analisis_probabilidad.r")
   ```
 
 📬 Contacto
 
 Si tienes dudas o sugerencias, ¡no dudes en contactarme!
-📧 Correo: doeo113900@gmail.com
+
+📧 Correo: enriquediaz.profesor@lasallecuernavaca.edu.mx
+
 🐦 Twitter: @EnriqueDiazOca1
+
 💼 LinkedIn: linkedin.com/in/enrique-diaz-ocampo-2377121a4/
 
 
