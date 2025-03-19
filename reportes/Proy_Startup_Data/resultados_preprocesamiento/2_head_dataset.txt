@@ -1,0 +1,9 @@
+# A tibble: 6 × 12
+  `Startup Name` Industry `Funding Rounds` `Funding Amount (M USD)` `Valuation (M USD)` `Revenue (M USD)` Employees `Market Share (%)` Profitable `Year Founded` Region        `Exit Status`
+  <chr>          <chr>               <dbl>                    <dbl>               <dbl>             <dbl>     <dbl>              <dbl>      <dbl>          <dbl> <chr>         <chr>        
+1 Startup_1      IoT                     1                    101.                 845.              67.9      1468               5.2           0           2006 Europe        Private      
+2 Startup_2      EdTech                  1                    248.                3311.              75.6      3280               8.1           1           2003 South America Private      
+3 Startup_3      EdTech                  1                    109.                1059.              84.2      4933               2.61          1           1995 South America Private      
+4 Startup_4      Gaming                  5                     10.8                102.              47.1      1059               2.53          0           2003 South America Private      
+5 Startup_5      IoT                     4                    249.                 850.              50.2      1905               4.09          0           1997 Europe        Acquired     
+6 Startup_6      AI                      5                    104.                1542.              12.6      1462               8.96          1           2004 Europe        IPO          

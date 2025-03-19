@@ -1,0 +1,117 @@
+---
+title: "Cálculo de Probabilidades en Oral Cancer Dataset"
+author: "Enrique Díaz Ocampo"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+1️⃣ Introducción
+
+Este análisis tiene como objetivo calcular probabilidades condicionales en el dataset Oral Cancer Prediction, respondiendo preguntas como:
+
+✔ ¿Cuál es la probabilidad de tener un diagnóstico positivo de cáncer si el paciente fuma?
+✔ ¿Cómo influye el consumo de alcohol en el diagnóstico?
+
+Estos cálculos son clave para evaluar factores de riesgo y mejorar la toma de decisiones en salud.
+
+2️⃣ Carga de Librerías y Configuración
+
+```{r}
+# 📌 Cargar librerías necesarias
+library(here)           # Rutas dinámicas
+library(dplyr)          # Manipulación de datos
+library(ggplot2)        # Visualización
+library(readr)          # Lectura de archivos CSV
+library(plotly)         # Gráficos interactivos
+
+# 📌 Cargar dataset limpio
+dataset_oral_cancer <- read_csv(
+  here("datasets/oral_cancer_data_limpio.csv"),
+  show_col_types = FALSE
+)
+
+```
+
+
+3️⃣ Cálculo de Probabilidades Condicionales
+
+Analizamos la relación entre factores de riesgo y diagnóstico temprano de cáncer.
+
+
+## 📌 Probabilidad de Diagnóstico Positivo dado que el Paciente Fuma
+```{r}
+
+sub_tobacco <- dataset_oral_cancer %>%
+  filter(`Tobacco Use` == "Yes")
+
+n_tobacco_total <- nrow(sub_tobacco)
+n_tobacco_malignant <- sub_tobacco %>%
+  filter(`Early Diagnosis` == "Yes") %>%
+  nrow()
+
+p_malignant_given_tobacco <- n_tobacco_malignant / n_tobacco_total
+p_malignant_given_tobacco
+
+```
+
+
+## 📌 Probabilidad de Diagnóstico Positivo dado que el Paciente Consume Alcohol
+```{r}
+sub_alcohol <- dataset_oral_cancer %>%
+  filter(`Alcohol Consumption` == "Yes")
+
+n_alcohol_total <- nrow(sub_alcohol)
+n_alcohol_malignant <- sub_alcohol %>%
+  filter(`Early Diagnosis` == "Yes") %>%
+  nrow()
+
+p_malignant_given_alcohol <- n_alcohol_malignant / n_alcohol_total
+p_malignant_given_alcohol
+
+```
+
+
+
+4️⃣ Visualización de Resultados
+
+Generamos gráficos interactivos para una mejor interpretación de los datos.
+
+```{r}
+p_tobacco <- ggplot(dataset_oral_cancer, aes(x = `Tobacco Use`, fill = `Early Diagnosis`)) +
+  geom_bar(position = "fill") +
+  labs(title = "Probabilidad de Diagnóstico Temprano según Uso de Tabaco", 
+       x = "Uso de Tabaco", y = "Proporción", fill = "Diagnóstico") +
+  theme_minimal(base_size = 14)
+
+# Guardar gráfico
+ggsave(here("reportes/Proy_Oral_Cancer_Prediction/resultados_generados/probabilidad_tobacco.png"),
+       plot = p_tobacco, width = 8, height = 6, bg = "white")
+
+# Convertir en gráfico interactivo
+ggplotly(p_tobacco)
+
+```
+
+
+
+```{r}
+p_alcohol <- ggplot(dataset_oral_cancer, aes(x = `Alcohol Consumption`, fill = `Early Diagnosis`)) +
+  geom_bar(position = "fill") +
+  labs(title = "Probabilidad de Diagnóstico Temprano según Consumo de Alcohol", 
+       x = "Consumo de Alcohol", y = "Proporción", fill = "Diagnóstico") +
+  theme_minimal(base_size = 14)
+
+# Guardar gráfico
+ggsave(here("reportes/Proy_Oral_Cancer_Prediction/resultados_generados/probabilidad_alcohol.png"),
+       plot = p_alcohol, width = 8, height = 6, bg = "white")
+
+# Convertir en gráfico interactivo
+ggplotly(p_alcohol)
+
+```

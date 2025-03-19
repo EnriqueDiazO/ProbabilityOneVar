@@ -1,0 +1,332 @@
+---
+title: "Guía de Gráficos para el Análisis Exploratorio de Datos (EDA)"
+author: "Enrique Díaz Ocampo"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+# 📌 Configuración inicial
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+## 1️⃣ **Introducción**
+Esta guía proporciona una serie de gráficos para realizar un **Análisis Exploratorio de Datos (EDA)** en diferentes niveles:
+
+- **Análisis Unidimensional:** Distribución de una sola variable.
+
+- **Análisis Multivariado:** Relación entre dos o más variables.
+
+- **Visualización con `ggplot2`** para explorar patrones en los datos.
+
+Esta guía te ayudará a seleccionar el gráfico más adecuado según el tipo de variable analizada.
+
+---
+
+## 2️⃣ **Carga de Librerías y Configuración**
+```{r}
+# 📌 Cargar librerías necesarias
+library(here)           # Manejo de rutas dinámicas
+library(janitor)        # Limpieza de nombres de columnas
+library(summarytools)   # Resumen estadístico detallado
+library(ggplot2)        # Gráficos
+library(dplyr)          # Manipulación de datos
+library(plotly)         # Gŕaficos Interactivos
+
+# 📌 Configuración de gráficos globales
+theme_set(theme_minimal())
+source(here("reportes/Proy_Oral_Cancer_Prediction/00_CONFIGURACION.r"))
+
+# 📌 Cargar scripts de preprocesamiento
+source(here("scripts/utils.r"))
+source(here("scripts/1_preprocesamiento_esp_dataset.r"))
+```
+
+---
+
+## 3️⃣ **Carga y Preprocesamiento de Datos**
+```{r}
+# 📌 Cargar y preprocesar el dataset
+dataset_oral_cancer <- preprocesar_datos(here("datasets/oral_cancer_data_limpio.csv"), "Oral Cancer")
+```
+
+📌 **¿Qué hace esta función?**
+
+✔ Limpia los nombres de las columnas.
+
+✔ Convierte variables categóricas en factores.
+
+✔ Filtra valores inválidos.
+
+✔ Retorna un dataset listo para análisis.
+
+---
+
+## 4️⃣ **Análisis Unidimensional**
+El análisis unidimensional permite estudiar la distribución de una sola variable.
+
+### 📌 **Boxplot para una variable cuantitativa**
+
+```{r}
+# Crear el boxplot mejorado
+p_boxplot_edad <- ggplot(dataset_oral_cancer, aes(y = age)) +
+  geom_boxplot(fill = "lightblue", color = "black", alpha = 0.7, outlier.color = "red", outlier.shape = 16) + 
+  labs(title = "Distribución de la Edad de los Pacientes", 
+       y = "Edad", 
+       x = "Pacientes") + 
+  theme_classic(base_size = 16) + 
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 20, face = "bold"),
+    axis.title = element_text(size = 16, face = "bold"),
+    axis.text = element_text(size = 14)
+  )
+
+# Guardar la imagen en la carpeta usando here()
+ggsave(here("reportes/Proy_Oral_Cancer_Prediction/resultados_generados/boxplot_edad.png"), 
+       plot = p_boxplot_edad, 
+       width = 8, height = 6, bg = "white")
+
+# Convertir a gráfico interactivo
+ggplotly(p_boxplot_edad)
+```
+📌 **Útil para:** Detectar valores atípicos y distribución de datos.
+
+### 📌 **Histograma para una variable cuantitativa**
+```{r}
+# Crear el histograma mejorado
+p_histograma_edad <- ggplot(dataset_oral_cancer, aes(x = age)) +
+  geom_histogram(binwidth = 5, fill = "lightblue", color = "black", alpha = 0.7) +  # Color mejorado
+  geom_density(aes(y = ..count.. * 5), color = "red", linetype = "dashed", size = 1.2) + # Línea de densidad
+  labs(title = "Distribución de Edad de los Pacientes", 
+       x = "Edad", 
+       y = "Frecuencia") + 
+  theme_classic(base_size = 16) + 
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 20, face = "bold"),
+    axis.title = element_text(size = 16, face = "bold"),
+    axis.text = element_text(size = 14)
+  )
+
+# Guardar la imagen en la carpeta usando here()
+ggsave(here("reportes/Proy_Oral_Cancer_Prediction/resultados_generados/boxplot_edad.png"), 
+       plot = p_histograma_edad, 
+       width = 8, height = 6, bg = "white")
+
+# Convertir a gráfico interactivo
+ggplotly(p_histograma_edad)
+```
+📌 **Útil para:** Observar la distribución de frecuencia de una variable numérica.
+
+
+```{r}
+# Definir colores personalizados para género
+colores_genero <- c("Male" = "blue", "Female" = "red")
+
+# Crear el histograma con ggplot2
+p <- ggplot(dataset_oral_cancer, aes(x = age, fill = gender)) +
+  geom_histogram(binwidth = 1, alpha = 0.5, position = "identity") +
+  scale_fill_manual(values = colores_genero) +
+  labs(title = "Histograma de Edad por Género", x = "Edad", y = "Frecuencia", fill = "Género") +
+  theme_minimal(base_size = 16) +
+  theme(
+    plot.background = element_rect(fill = "white", color = NA), 
+    panel.background = element_rect(fill = "white", color = NA), 
+    plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
+    axis.title = element_text(size = 16, face = "bold"),
+    axis.text = element_text(size = 14),
+    legend.title = element_text(size = 14, face = "bold"),
+    legend.text = element_text(size = 12)
+  )
+
+# Guardar la imagen en la carpeta resultados_generados
+ggsave(filename = here("reportes/Proy_Oral_Cancer_Prediction/resultados_generados/histograma_edad_genero.png"), plot = p, width = 8, height = 6)
+
+# Convertir a gráfico interactivo
+ggplotly(p)
+
+
+```
+
+```{r}
+# Definir colores personalizados para uso del tabaco
+colores_tabaco <- c("Yes" = "yellow", "No" = "gray")
+
+# Crear el histograma
+p2 <- ggplot(dataset_oral_cancer, aes(x = tumor_size_cm, fill = tobacco_use)) +
+  geom_histogram(binwidth = 1, alpha = 0.5, position = "identity", color = "black") +
+  scale_fill_manual(values = colores_tabaco) +
+  labs(title = "Histograma de Tamaño del Tumor por Hábito de Fumar",
+       x = "Tamaño del Tumor (cm)", y = "Frecuencia", fill = "Fumador") +
+  theme_minimal(base_size = 16) +
+  theme(
+    plot.background = element_rect(fill = "white", color = NA), 
+    panel.background = element_rect(fill = "white", color = NA),
+    plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
+    axis.title = element_text(size = 16, face = "bold"),
+    axis.text = element_text(size = 14),
+    legend.title = element_text(size = 14, face = "bold"),
+    legend.text = element_text(size = 12)
+  )
+
+# Guardar la imagen en la carpeta resultados_generados
+ggsave(filename = here("reportes/Proy_Oral_Cancer_Prediction/resultados_generados/histograma_tamano_tumor.png"), plot = p2, width = 8, height = 6)
+
+# Convertir a gráfico interactivo
+ggplotly(p2)
+
+```
+
+### 📌 **Barplot para una variable cualitativa**
+```{r}
+# Crear gráfico de barras con ggplot2
+p_gender <- ggplot(dataset_oral_cancer, aes(x = gender, fill = gender)) +
+  geom_bar() +
+  labs(title = "Distribución de Género", x = "Género", y = "Frecuencia", fill = "Género") +
+  scale_fill_manual(values = c("Male" = "cyan", "Female" = "pink")) +
+  theme_classic(base_size = 16) +
+  theme(
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA),
+    plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
+    axis.title = element_text(size = 16, face = "bold"),
+    axis.text = element_text(size = 14),
+    legend.title = element_text(size = 14, face = "bold"),
+    legend.text = element_text(size = 12)
+  )
+
+# Guardar la imagen
+ggsave(filename = here("reportes/Proy_Oral_Cancer_Prediction/resultados_generados/barplot_genero.png"), plot = p_gender, width = 8, height = 6, bg = "white")
+
+# Convertir a gráfico interactivo
+ggplotly(p_gender)
+
+```
+📌 **Útil para:** Mostrar la frecuencia de categorías en una variable cualitativa.
+
+
+### 📌 Gráfico Interactivo de Distribución por País (Country)
+
+```{r}
+# Crear gráfico de barras para Country
+p_country <- ggplot(dataset_oral_cancer, aes(x = reorder(country, country, function(x) -length(x)), fill = country)) +
+  geom_bar() +
+  labs(title = "Distribución de Pacientes por País", x = "País", y = "Frecuencia", fill = "País") +
+  coord_flip() +  # Rotar para mejor visualización
+  theme_classic(base_size = 16) +
+  theme(
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA),
+    plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
+    axis.title = element_text(size = 16, face = "bold"),
+    axis.text = element_text(size = 12),
+    legend.position = "none"  # Ocultar leyenda para mejor visualización
+  )
+
+# Guardar la imagen
+ggsave(filename = here("reportes/Proy_Oral_Cancer_Prediction/resultados_generados/barplot_country.png"), plot = p_country, width = 8, height = 6, bg = "white")
+
+# Convertir a gráfico interactivo
+ggplotly(p_country)
+
+```
+
+---
+
+## 5️⃣ **Análisis Multivariado**
+El análisis multivariado permite explorar relaciones entre dos o más variables.
+
+### 📌 **Cualitativa vs Cualitativa** (Gráfico de barras cruzado)
+```{r}
+# Crear gráfico de barras con ggplot2
+p_tabaco_genero <- ggplot(dataset_oral_cancer, aes(x = gender, fill = tobacco_use)) +
+  geom_bar(position = "dodge") +
+  labs(title = "Consumo de Tabaco por Género", x = "Género", y = "Frecuencia", fill = "Consumo de Tabaco") +
+  scale_fill_manual(values = c("Yes" = "cyan", "No" = "green")) +
+  theme_classic(base_size = 16) +
+  theme(
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA),
+    plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
+    axis.title = element_text(size = 16, face = "bold"),
+    axis.text = element_text(size = 14),
+    legend.title = element_text(size = 14, face = "bold"),
+    legend.text = element_text(size = 12)
+  )
+
+# Guardar imagen
+ggsave(filename = here("reportes/Proy_Oral_Cancer_Prediction/resultados_generados/barplot_tabaco_genero.png"), plot = p_tabaco_genero, width = 8, height = 6, bg = "white")
+
+# Convertir a gráfico interactivo
+ggplotly(p_tabaco_genero)
+```
+📌 **Útil para:** Comparar la frecuencia de categorías en dos variables cualitativas.
+
+### 📌 **Cuantitativa vs Cualitativa** (Boxplot)
+```{r}
+# Definir colores personalizados para diagnóstico de cáncer oral
+etapa_cancer <- c("0" = "darkorange", "1" = "dodgerblue", "2" = "cyan", "3" = "blue", "4"="black")
+
+# Crear boxplot con ggplot2
+p_edad_diagnostico <- ggplot(dataset_oral_cancer, aes(x = cancer_stage, y = tumor_size_cm, fill = cancer_stage)) +
+  geom_boxplot() +
+  labs(title = "Distribución del Tamaño del Tumor por Etapa del Cáncer", 
+       x = "Etapa del Cáncer", 
+       y = "Tamaño del Tumor (cm)", 
+       fill = "Diagnóstico") +
+  scale_fill_manual(values = etapa_cancer) +
+  theme_classic(base_size = 16) +
+  theme(
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA),
+    plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
+    axis.title = element_text(size = 16, face = "bold"),
+    axis.text = element_text(size = 14),
+    legend.title = element_text(size = 14, face = "bold"),
+    legend.text = element_text(size = 12)
+  )
+
+# Guardar imagen en la carpeta de resultados generados
+ggsave(filename = here("reportes/Proy_Oral_Cancer_Prediction/resultados_generados/boxplot_tumor_cancer_stage.png"), plot = p_edad_diagnostico, width = 8, height = 6, bg = "white")
+
+# Convertir a gráfico interactivo
+ggplotly(p_edad_diagnostico)
+
+```
+📌 **Útil para:** Comparar la distribución de una variable numérica en función de una variable categórica.
+
+### 📌 **Cuantitativa vs Cuantitativa** (Diagrama de dispersión)
+```{r}
+# Crear scatterplot con ggplot2
+p_edad_tumor <- ggplot(dataset_oral_cancer, aes(x = age, y = tumor_size_cm)) +
+  geom_point(alpha = 0.5, color = "steelblue") +
+  labs(title = "Relación entre Edad y Tamaño del Tumor", x = "Edad", y = "Tamaño del Tumor (cm)") +
+  theme_classic(base_size = 16) +
+  theme(
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA),
+    plot.title = element_text(hjust = 0.5, size = 18, face = "bold"),
+    axis.title = element_text(size = 16, face = "bold"),
+    axis.text = element_text(size = 14)
+  )
+
+# Guardar imagen
+ggsave(filename = here("reportes/Proy_Oral_Cancer_Prediction/resultados_generados/scatter_edad_tumor.png"), plot = p_edad_tumor, width = 8, height = 6, bg = "white")
+
+# Convertir a gráfico interactivo
+ggplotly(p_edad_tumor)
+
+```
+📌 **Útil para:** Identificar tendencias y relaciones entre dos variables numéricas.
+
+---
+
+## **📌 Conclusión**
+Esta guía ha mostrado cómo aplicar distintos tipos de gráficos según el tipo de análisis deseado:
+
+✅ **Análisis Unidimensional:** Estudio de una sola variable.
+✅ **Análisis Multivariado:** Exploración de relaciones entre variables.
+✅ **Visualización con `ggplot2`** para obtener insights del dataset.
+
+🚀 **¡Listo! Ahora puedes usar estas técnicas para analizar cualquier dataset!** 🎯📊

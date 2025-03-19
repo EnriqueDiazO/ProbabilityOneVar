@@ -1,0 +1,158 @@
+
+------------------------------
+📊 Distribución de valores en: country 
+[[1]]
+country
+   Australia       Brazil        Egypt       France      Germany        India 
+        3189         4762         3263         4783         4909         8079 
+       Italy        Japan        Kenya      Nigeria     Pakistan       Russia 
+        4834         3152         3171         3256         8001         4711 
+South Africa    Sri Lanka       Taiwan           UK          USA 
+        3086         8000         7905         4930         4891 
+
+
+------------------------------
+📊 Distribución de valores en: gender 
+[[1]]
+gender
+  Male Female 
+ 60351  24571 
+
+
+------------------------------
+📊 Distribución de valores en: tobacco_use 
+[[1]]
+tobacco_use
+   No   Yes 
+16933 67989 
+
+
+------------------------------
+📊 Distribución de valores en: alcohol_consumption 
+[[1]]
+alcohol_consumption
+   No   Yes 
+33983 50939 
+
+
+------------------------------
+📊 Distribución de valores en: hpv_infection 
+[[1]]
+hpv_infection
+   No   Yes 
+59525 25397 
+
+
+------------------------------
+📊 Distribución de valores en: betel_quid_use 
+[[1]]
+betel_quid_use
+   No   Yes 
+60299 24623 
+
+
+------------------------------
+📊 Distribución de valores en: chronic_sun_exposure 
+[[1]]
+chronic_sun_exposure
+   No   Yes 
+68057 16865 
+
+
+------------------------------
+📊 Distribución de valores en: poor_oral_hygiene 
+[[1]]
+poor_oral_hygiene
+   No   Yes 
+42627 42295 
+
+
+------------------------------
+📊 Distribución de valores en: diet_fruits_vegetables_intake 
+[[1]]
+diet_fruits_vegetables_intake
+     Low Moderate     High 
+   33896    33914    17112 
+
+
+------------------------------
+📊 Distribución de valores en: family_history_of_cancer 
+[[1]]
+family_history_of_cancer
+   No   Yes 
+76508  8414 
+
+
+------------------------------
+📊 Distribución de valores en: compromised_immune_system 
+[[1]]
+compromised_immune_system
+   No   Yes 
+76368  8554 
+
+
+------------------------------
+📊 Distribución de valores en: oral_lesions 
+[[1]]
+oral_lesions
+   No   Yes 
+59419 25503 
+
+
+------------------------------
+📊 Distribución de valores en: unexplained_bleeding 
+[[1]]
+unexplained_bleeding
+   No   Yes 
+67891 17031 
+
+
+------------------------------
+📊 Distribución de valores en: difficulty_swallowing 
+[[1]]
+difficulty_swallowing
+   No   Yes 
+63709 21213 
+
+
+------------------------------
+📊 Distribución de valores en: white_or_red_patches_in_mouth 
+[[1]]
+white_or_red_patches_in_mouth
+   No   Yes 
+55103 29819 
+
+
+------------------------------
+📊 Distribución de valores en: cancer_stage 
+[[1]]
+cancer_stage
+    0     1     2     3     4 
+42573 12713 12865 10520  6251 
+
+
+------------------------------
+📊 Distribución de valores en: treatment_type 
+[[1]]
+treatment_type
+    No Treatment     Chemotherapy        Radiation          Surgery 
+           51016             8529             8412             8500 
+Targeted Therapy 
+            8465 
+
+
+------------------------------
+📊 Distribución de valores en: early_diagnosis 
+[[1]]
+early_diagnosis
+   No   Yes 
+38414 46508 
+
+
+------------------------------
+📊 Distribución de valores en: oral_cancer_diagnosis 
+[[1]]
+oral_cancer_diagnosis
+   No   Yes 
+42573 42349 
+

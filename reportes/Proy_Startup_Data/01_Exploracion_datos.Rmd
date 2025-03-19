@@ -1,0 +1,44 @@
+---
+title: "Análisis Exploratorio de Datos"
+author: "Enrique Díaz Ocampo"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+```{r}
+#  Cargar configuración global
+#source("reportes/00_CONFIGURACION.r")
+library(here)
+library(janitor)
+source(here("reportes/Proy_Oral_Cancer_Prediction/00_CONFIGURACION.r"))
+
+#  Cargar scripts de preprocesamiento
+source(here("scripts/utils.r"))
+source(here("scripts/1_preprocesamiento_esp_dataset.r"))
+
+
+```
+
+```{r}
+# 📌 Ejemplo de uso en cada proyecto
+# Proyecto Oral Cancer
+dataset_oral_cancer <- preprocesar_datos(here("datasets/oral_cancer_data_limpio.csv")
+, "Oral Cancer")
+
+# Proyecto Startup Data
+#dataset_startup <- preprocesar_datos("datasets/startup_data.csv", "Startup Data")
+
+# Proyecto Education Success
+#dataset_education <- preprocesar_datos("datasets/education_career_success.csv", "Education Success")
+
+
+```
+
+```{r}
+save_categorical_counts(dataset_oral_cancer,"Proy_Oral_Cancer_Prediction")
+
+```
