@@ -1,0 +1,148 @@
+
+------------------------------
+📊 Distribución de valores en: Country 
+[[1]]
+Country
+   Australia       Brazil        Egypt       France      Germany        India        Italy 
+        3189         4762         3263         4783         4909         8079         4834 
+       Japan        Kenya      Nigeria     Pakistan       Russia South Africa    Sri Lanka 
+        3152         3171         3256         8001         4711         3086         8000 
+      Taiwan           UK          USA 
+        7905         4930         4891 
+
+
+------------------------------
+📊 Distribución de valores en: Gender 
+[[1]]
+Gender
+Female   Male 
+ 24571  60351 
+
+
+------------------------------
+📊 Distribución de valores en: Tobacco Use 
+[[1]]
+Tobacco Use
+   No   Yes 
+16933 67989 
+
+
+------------------------------
+📊 Distribución de valores en: Alcohol Consumption 
+[[1]]
+Alcohol Consumption
+   No   Yes 
+33983 50939 
+
+
+------------------------------
+📊 Distribución de valores en: HPV Infection 
+[[1]]
+HPV Infection
+   No   Yes 
+59525 25397 
+
+
+------------------------------
+📊 Distribución de valores en: Betel Quid Use 
+[[1]]
+Betel Quid Use
+   No   Yes 
+60299 24623 
+
+
+------------------------------
+📊 Distribución de valores en: Chronic Sun Exposure 
+[[1]]
+Chronic Sun Exposure
+   No   Yes 
+68057 16865 
+
+
+------------------------------
+📊 Distribución de valores en: Poor Oral Hygiene 
+[[1]]
+Poor Oral Hygiene
+   No   Yes 
+42627 42295 
+
+
+------------------------------
+📊 Distribución de valores en: Diet (Fruits & Vegetables Intake) 
+[[1]]
+Diet (Fruits & Vegetables Intake)
+    High      Low Moderate 
+   17112    33896    33914 
+
+
+------------------------------
+📊 Distribución de valores en: Family History of Cancer 
+[[1]]
+Family History of Cancer
+   No   Yes 
+76508  8414 
+
+
+------------------------------
+📊 Distribución de valores en: Compromised Immune System 
+[[1]]
+Compromised Immune System
+   No   Yes 
+76368  8554 
+
+
+------------------------------
+📊 Distribución de valores en: Oral Lesions 
+[[1]]
+Oral Lesions
+   No   Yes 
+59419 25503 
+
+
+------------------------------
+📊 Distribución de valores en: Unexplained Bleeding 
+[[1]]
+Unexplained Bleeding
+   No   Yes 
+67891 17031 
+
+
+------------------------------
+📊 Distribución de valores en: Difficulty Swallowing 
+[[1]]
+Difficulty Swallowing
+   No   Yes 
+63709 21213 
+
+
+------------------------------
+📊 Distribución de valores en: White or Red Patches in Mouth 
+[[1]]
+White or Red Patches in Mouth
+   No   Yes 
+55103 29819 
+
+
+------------------------------
+📊 Distribución de valores en: Treatment Type 
+[[1]]
+Treatment Type
+    Chemotherapy     No Treatment        Radiation          Surgery Targeted Therapy 
+            8529            51016             8412             8500             8465 
+
+
+------------------------------
+📊 Distribución de valores en: Early Diagnosis 
+[[1]]
+Early Diagnosis
+   No   Yes 
+38414 46508 
+
+
+------------------------------
+📊 Distribución de valores en: Oral Cancer (Diagnosis) 
+[[1]]
+Oral Cancer (Diagnosis)
+   No   Yes 
+42573 42349 
+
