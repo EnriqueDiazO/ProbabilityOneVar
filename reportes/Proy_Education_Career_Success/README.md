@@ -98,3 +98,40 @@ Para replicar el análisis, asegúrate de tener **R y RStudio** instalados, junt
 ```r
 install.packages(c("tidyverse", "ggplot2", "dplyr", "readr"))
 ```
+
+
+# 📂 Estructura del Proyecto Education Career Success
+
+El proyecto Education Career Success analiza la relación entre la educación, la experiencia laboral y el éxito profesional. A través de un Análisis Exploratorio de Datos (EDA), un Análisis Estadístico y un Estudio de Probabilidad, se identifican patrones clave en el desarrollo profesional de los individuos.
+
+
+```bash
+
+reportes/Proy_Education_Career_Success/
+│── 00_CONFIGURACION.r                          # Archivo de configuración del proyecto
+│
+│── 01_Exploracion_datos.Rmd                    # Análisis Exploratorio de Datos (EDA)
+│── 01_Exploracion_datos.html                   # Versión HTML del análisis exploratorio
+│
+│── 02_Analisis_Estadistico.Rmd                 # Análisis estadístico detallado
+│── 02_Analisis_Estadistico.html                # Versión HTML del análisis estadístico
+│
+│── 03_Analisis_Probabilidad.Rmd                # Análisis de probabilidad
+│── 03_Analisis_Probabilidad.html               # Versión HTML del análisis de probabilidad
+│
+│── README.md                                   # Documentación principal del proyecto
+│
+│── resultados_generados/                       # Carpeta con gráficos y resultados generados
+│   ├── 1_categorical_variable_counts.txt       # Distribución de variables categóricas
+│   ├── barplot_field.png                       # Gráfico de barras de campos de estudio
+│   ├── barplot_genero_field.png                # Gráfico de barras de campo de estudio por género
+│   ├── boxplot_edad.png                        # Boxplot de edad
+│   ├── boxplot_salary_field_gender.html        # Boxplot de salario por campo de estudio y género (interactivo)
+│   ├── boxplot_salary_field.png                # Boxplot de salario por campo de estudio
+│   ├── histograma_edad.png                     # Histograma de edad
+│   ├── histograma_salario_genero.png           # Histograma de salario por género
+│   ├── probabilidad_condicional_gender_vs_salary.png  # Probabilidad condicional de salario según género
+│   ├── probabilidad_condicional_university_vs_satisfaction.png  # Probabilidad condicional de satisfacción según ranking universitario
+│   ├── scatter_sat_gpa.png                     # Scatterplot de SAT vs GPA universitario
+
+```

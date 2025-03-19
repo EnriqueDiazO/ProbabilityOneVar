@@ -82,3 +82,37 @@ Para replicar el análisis, asegúrate de tener **R y RStudio** instalados, junt
 
 ```r
 install.packages(c("tidyverse", "ggplot2", "dplyr", "readr"))
+```
+
+# 📂 Estructura del Proyecto Startup Data Analysis
+
+El proyecto Startup Data Analysis examina cómo diversos factores como financiamiento, industria, rentabilidad y crecimiento influyen en el éxito de una startup. Se desarrolla un Análisis Exploratorio de Datos (EDA), un Análisis Estadístico y un Estudio de Probabilidad para identificar patrones clave en el ecosistema emprendedor.
+
+```bash
+reportes/Proy_Startup_Data/
+│── 00_CONFIGURACION.r                          # Archivo de configuración del proyecto
+│
+│── 01_Exploracion_datos.Rmd                    # Análisis Exploratorio de Datos (EDA)
+│── 01_Exploracion_datos.html                   # Versión HTML del análisis exploratorio
+│
+│── 02_Analisis_Estadistico.Rmd                 # Análisis estadístico detallado
+│── 02_Analisis_Estadistico.html                # Versión HTML del análisis estadístico
+│
+│── 03_Analisis_Probabilidad.Rmd                # Análisis de probabilidad
+│── 03_Analisis_Probabilidad.html               # Versión HTML del análisis de probabilidad
+│
+│── README.md                                   # Documentación principal del proyecto
+│
+│── resultados_generados/                       # Carpeta con gráficos y resultados generados
+│   ├── 1_categorical_variable_counts.txt       # Distribución de variables categóricas
+│   ├── barplot_exit_status.png                 # Gráfico de barras del estado de salida de startups
+│   ├── barplot_industria.png                   # Gráfico de barras por industria
+│   ├── boxplot_empleados.png                   # Boxplot de número de empleados
+│   ├── boxplot_financiamiento_industria.png    # Boxplot de financiamiento por industria
+│   ├── histograma_financiamiento.png           # Histograma de montos de financiamiento
+│   ├── probabilidad_condicional_empleados_vs_rentabilidad.png  # Probabilidad condicional de rentabilidad según empleados
+│   ├── probabilidad_condicional_financiamiento_vs_rentabilidad.png  # Probabilidad condicional de rentabilidad según financiamiento
+│   ├── probabilidad_condicional_marketshare_vs_revenue.png  # Probabilidad condicional de market share vs revenue
+│   ├── scatter_valuacion_vs_financiamiento.png  # Scatterplot de valuación vs financiamiento
+```
+
