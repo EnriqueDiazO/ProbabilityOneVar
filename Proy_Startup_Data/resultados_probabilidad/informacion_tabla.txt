@@ -1,0 +1,23 @@
+Filas (IsIoT):
+
+    IoT: Hace referencia a las startups que pertenecen a la industria IoT.
+    No_IoT: Hace referencia a las startups de cualquier otra industria.
+
+Columnas (Profitable):
+
+    0: Significa que la startup no es rentable.
+    1: Significa que la startup sí es rentable.
+
+Celdas: Cada celda muestra el número de startups que cumplen simultáneamente con la condición de la fila y la columna. Por ejemplo:
+
+    Celda [IoT, 0] = 29: Hay 29 startups IoT que no son rentables.
+    Celda [IoT, 1] = 32: Hay 32 startups IoT que sí son rentables.
+    Celda [No_IoT, 0] = 255: Hay 255 startups de otras industrias que no son rentables.
+    Celda [No_IoT, 1] = 184: Hay 184 startups de otras industrias que sí son rentables.
+
+Sumas por fila y columna:
+
+    Fila ‘IoT’: 29 (no rentables) + 32 (rentables) = 61 startups en IoT.
+    Fila ‘No_IoT’: 255 (no rentables) + 184 (rentables) = 439 startups fuera de IoT.
+    Columna ‘0’ (no rentables): 29 (IoT) + 255 (No_IoT) = 284 startups no rentables.
+    Columna ‘1’ (rentables): 32 (IoT) + 184 (No_IoT) = 216 startups rentables.

@@ -1,0 +1,6 @@
+           Student_ID                   Age                Gender       High_School_GPA             SAT_Score    University_Ranking        University_GPA        Field_of_Study Internships_Completed 
+                    0                     0                     0                     0                     0                     0                     0                     0                     0 
+   Projects_Completed        Certifications     Soft_Skills_Score      Networking_Score            Job_Offers       Starting_Salary   Career_Satisfaction    Years_to_Promotion     Current_Job_Level 
+                    0                     0                     0                     0                     0                     0                     0                     0                     0 
+    Work_Life_Balance      Entrepreneurship 
+                    0                     0 
