@@ -59,6 +59,7 @@ crear_histograma <- function(data, x, fill = NULL, title, xlab, ylab, binwidth =
   # Crear el gráfico base
   p <- ggplot(data, aes(x = !!sym(x))) +
     geom_histogram(binwidth = binwidth, alpha = 0.7, position = "identity", color = "black") +
+    #geom_histogram(aes(y = after_stat(density)), binwidth = binwidth, alpha = 0.7, position = "identity", color = "black") +
     labs(title = title, x = xlab, y = ylab) +
     theme_minimal(base_size = 14) +
     theme(
@@ -75,6 +76,7 @@ crear_histograma <- function(data, x, fill = NULL, title, xlab, ylab, binwidth =
   # Agregar línea de densidad si se solicita
   if (densidad) {
     p <- p + geom_density(aes(y = after_stat(count) * binwidth), color = "red", linetype = "dashed", size = 1.2)
+    #p <- p + geom_density(aes(y = after_stat(density)), color = "red", linetype = "dashed", size = 1.2)
   }
   
   # Personalizar colores si se proporcionan

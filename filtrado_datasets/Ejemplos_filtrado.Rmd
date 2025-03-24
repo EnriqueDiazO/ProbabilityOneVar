@@ -1,0 +1,316 @@
+---
+title: "Ejemplos de Filtrado"
+author: "Enrique Díaz Ocampo"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# GUÍA PRÁCTICA PARA FILTRADO Y TRANSFORMACIÓN EN R
+
+## Preámbulo
+```{r}
+library(here)           # Manejo de rutas dinámicas
+source("00_CONFIGURACION.r")
+```
+
+```{r}
+library(janitor)        # Limpieza de nombres de columnas
+library(summarytools)   # Resumen estadístico detallado
+library(ggplot2)        # Gráficos
+library(dplyr)          # Manipulación de datos
+
+# 📌 Cargar configuración global
+theme_set(theme_minimal())
+
+# 📌 Cargar scripts de preprocesamiento
+source(here("scripts/utils.r"))
+source(here("scripts/1_preprocesamiento_esp_dataset.r"))
+source(here("scripts/2_analisis_gráfico.r"))
+source(here("scripts/3_analisis_probabilidad.r"))
+```
+
+```{r}
+# 📌 Importación de datasets
+education_data <- preprocesar_datos(here("datasets/education_data_limpio.csv"), "Education Career Success")
+dataset_oral_cancer <- preprocesar_datos(here("datasets/oral_cancer_data_limpio.csv"), "Oral Cancer")
+dataset_startup <- preprocesar_datos(here("datasets/startup_data_limpio.csv"), "Startup Data")
+
+```
+
+##  📌 1. FILTRADO DE DATOS
+
+En R existen varias formas de filtrar data frames. Las más comunes son:
+
+### ✅ 1sando `filter()` del paquete dplyr
+
+- Sintaxis: filter(data, condicion1, condicion2, ...)
+
+- Usa operadores lógicos: ==, !=, >, <, >=, <=, %in%, &, |, !
+
+```{r}
+# Ejemplo en education_data seleccionando las carreras de matemáticas y medicina
+df_math_med <- education_data %>%
+  filter(field_of_study %in% c("Mathematics","Medicine"))
+
+# Ejemplo en dataset_oral_cancer selecccionando el país
+df_usa_cancer <- dataset_oral_cancer %>%
+  filter(country == "USA")
+
+# Ejemplo en dataset_startupt seleccionando las categorías de las empresas fundadas en los últimos 10 años
+df_news_industry <- dataset_startup %>%
+  mutate(year_founded = as.numeric(as.character(year_founded))) %>% # Convierte los años de factores a números
+  filter(industry %in% c("FinTech","E-Commerce"),
+         year_founded>=2016,
+         profitable == 1 
+         )
+
+```
+
+```{r}
+# Desglose por Summary y desglose por desc en df_mat_med
+summary(df_math_med)
+descr(df_math_med) 
+```
+
+
+```{r}
+# Desglose por Summary y desglose por desc en df_news_industry
+summary(df_news_industry)
+descr(df_news_industry) 
+```
+
+```{r}
+# Desglose por Summary y desglose por df_usa_cancer
+summary(df_usa_cancer)
+descr(df_usa_cancer) 
+```
+
+
+
+## Creación de Nuevas Columnas con mutate() y case_when()
+Una de las formas más comunes de transformar y enriquecer un conjunto de datos en R es mediante la creación de nuevas columnas. Para ello, el paquete dplyr ofrece la función mutate(), que permite agregar o modificar variables dentro de un data frame. Cuando se necesita generar variables categóricas basadas en condiciones lógicas múltiples, se recomienda utilizar case_when(), una función que actúa como un if-else vectorizado y que permite definir múltiples reglas de forma clara y ordenada.
+
+```{r}
+# Caso Education Carrer
+df_math_med <- df_math_med %>%
+  mutate(
+    # Definimos la columna categórica starting_salary_category
+    starting_salary_category = case_when(
+      starting_salary < 30000 ~ "Bajo",
+      starting_salary >= 30000 & starting_salary < 60000 ~ "Medio",
+      starting_salary >= 60000 ~ "Alto",
+      TRUE ~ NA_character_
+    ) %>%
+      factor(levels = c("Bajo", "Medio", "Alto"), ordered = TRUE)
+  )
+```
+
+```{r}
+# Caso Startups
+df_news_industry <- df_news_industry %>%
+  mutate(
+    # Definimos la columna categórica funding_amount_m_usd_category
+    funding_amount_m_usd_category = case_when(
+      funding_amount_m_usd < 50 ~ "[0-50)",
+      funding_amount_m_usd >= 50 & funding_amount_m_usd < 150 ~ "[50-150)",
+      funding_amount_m_usd >= 150 & funding_amount_m_usd < 250 ~ "[150-250)",
+      funding_amount_m_usd >= 250 ~ ">=250",
+      TRUE ~ NA_character_
+    ) %>%
+      factor(levels = c("[0-50)", "[50-150)", "[150-250)",">=250"), ordered = TRUE)
+  )
+```
+
+
+```{r}
+# Caso Oral Cancer
+df_usa_cancer <- df_usa_cancer %>%
+  mutate(
+    # Definimos la columna categórica survival_rate_5_year_percent_category
+    survival_rate_5_year_percent_category = case_when(
+      survival_rate_5_year_percent < 25 ~ "Baja",
+      survival_rate_5_year_percent >= 25 & survival_rate_5_year_percent < 50 ~ "Media",
+      survival_rate_5_year_percent >= 50 & survival_rate_5_year_percent < 75 ~ "Alta",
+      survival_rate_5_year_percent >= 75 ~ "Muy Alta",
+      TRUE ~ NA_character_
+    ) %>%
+      factor(levels = c("Baja", "Media", "Alta","Muy Alta"), ordered = TRUE)
+  )
+```
+
+## Guardando los resultados
+```{r}
+# Dataset Carreras
+write.csv(df_math_med, "outputs/df_math_med.csv", row.names = FALSE)
+
+write.csv(df_news_industry, "outputs/df_news_industry.csv", row.names = FALSE)
+
+write.csv(df_news_industry, "outputs/df_usa_cancer.csv", row.names = FALSE)
+```
+
+
+# Generación de Gráficos
+
+```{r}
+p_boxplot_edad <- crear_boxplot(
+  data = df_math_med,
+  y = "starting_salary",
+  title = "Distribución del salario inicial de los Estudiantes",
+  xlab = "Estudiantes",
+  ylab = "Edad",
+  fill = NULL,
+  colores = "blue"
+)
+
+# Guardar y mostrar el gráfico
+guardar_grafico(p_boxplot_edad, "outputs/boxplot_starting_salary.png")
+convertir_interactivo(p_boxplot_edad)
+```
+
+
+
+
+
+
+```{r}
+p_histograma_edad <- crear_histograma(
+  data = df_math_med,
+  x = "starting_salary",  # Variable a graficar
+  title = "Distribución del salario inicial de los Estudiantes",  # Título del gráfico
+  xlab = "Edad",  # Etiqueta del eje X
+  ylab = "Frecuencia",  # Etiqueta del eje Y
+  binwidth = 5000,  # Ancho de los bins
+  colores = "lightblue",  # Color de relleno
+  densidad = TRUE  # Agregar línea de densidad
+)
+
+# Guardar el gráfico
+guardar_grafico(p_histograma_edad, here("outputs/histograma_edad.png"))
+convertir_interactivo(p_histograma_edad)
+```
+
+
+
+
+```{r}
+
+# Definir colores y etiquetas para la leyenda
+colores_genero <- c("Male" = "blue", "Female" = "red", "Other" = "cyan")
+etiquetas_leyenda <- c("Hombres", "Mujeres", "Otro")
+
+# Crear el histograma superpuesto
+p_salary_histogram <- crear_histograma_filtrado(
+  data = df_math_med,
+  filtro_columna = "field_of_study",
+  filtro_valor = "Medicine",
+  x = "starting_salary",
+  fill = "gender",
+  title = "Distribución del Salario Inicial en Medicina" ,
+  xlab = "Salario Inicial (USD)",
+  ylab = "Frecuencia",
+  binwidth = 5000,
+  colores = colores_genero,
+  etiquetas_leyenda = etiquetas_leyenda
+)
+
+# Guardar el gráfico
+guardar_grafico(p_salary_histogram, here("outputs/histograma_salario_genero.png"))
+
+# Convertir a gráfico interactivo
+convertir_interactivo(p_salary_histogram)
+```
+
+
+```{r}
+# Crear el histograma usando la función crear_histograma
+p_histograma_edad_cancer <- crear_histograma(data = df_usa_cancer, x = "age", 
+                                      title = "Distribución de Edad de los Pacientes", 
+                                      xlab = "Edad", ylab = "Frecuencia", 
+                                      binwidth = 5, colores = "lightblue", densidad = TRUE)
+
+# Guardar la imagen en la carpeta usando here()
+guardar_grafico(p_histograma_edad_cancer,  here("outputs/histograma_salario_genero.png"))
+
+# Convertir a gráfico interactivo
+p_histograma_edad_interactivo <- convertir_interactivo(p_histograma_edad_cancer)
+p_histograma_edad_interactivo
+
+```
+
+```{r}
+# Definir colores personalizados para género
+colores_genero <- c("Male" = "blue", "Female" = "red")
+
+# Crear el histograma usando la función crear_histograma
+p_histograma_edad_genero <- crear_histograma(data = df_usa_cancer, x = "age", fill = "gender", 
+                                             title = "Histograma de Edad por Género", 
+                                             xlab = "Edad", ylab = "Frecuencia", 
+                                             binwidth = 1, colores = colores_genero)
+
+# Guardar la imagen en la carpeta usando here()
+guardar_grafico(p_histograma_edad_genero, here("outputs/histograma_edad_genero.png"))
+
+# Convertir a gráfico interactivo
+p_histograma_edad_genero_interactivo <- convertir_interactivo(p_histograma_edad_genero)
+p_histograma_edad_genero_interactivo
+```
+
+
+
+# Gráficos de probabilidad
+
+```{r}
+p_university_vs_satisfaction <- visualizar_probabilidad_condicional(
+  data = df_math_med,
+  condicionante = "university_ranking",
+  objetivo = "career_satisfaction",
+  titulo = "Probabilidad  Satisfacción Laboral según Ranking de la Universidad",
+  xlab = "Ranking de la Universidad (Intervalos)",
+  guardar = TRUE,
+  ruta_guardado = here("outputs/probabilidad_condicional_university_vs_satisfaction.png"),
+  bins = 5  # Dividir en 5 intervalos
+)
+
+# Mostrar gráfico interactivo
+p_university_vs_satisfaction
+```
+
+```{r}
+p_gender_vs_salary <- visualizar_probabilidad_condicional(
+  data = df_math_med,
+  condicionante = "career_satisfaction",
+  objetivo = "starting_salary",
+  titulo = "Probabilidad  Salario inicial según Nivel de Satisfaccion",
+  xlab = "Género",
+  guardar = TRUE,
+  ruta_guardado = here("outputs/probabilidad_condicional_gender_vs_salary.png"),
+  bins = 5  # Dividir en 5 intervalos
+)
+
+# Mostrar gráfico interactivo
+p_gender_vs_salary
+```
+
+
+```{r}
+p_empleados_vs_rentabilidad <- visualizar_probabilidad_condicional(
+  data = df_news_industry,
+  condicionante = "employees",
+  objetivo = "profitable",
+  titulo = "Probabilidad de Rentabilidad según el Número de Empleados",
+  xlab = "Número de Empleados (Intervalos)",
+  guardar = TRUE,
+  ruta_guardado = here("outputs/probabilidad_condicional_empleados_vs_rentabilidad.png"),
+  bins = 4
+)
+
+# Mostrar gráfico interactivo
+p_empleados_vs_rentabilidad
+```
+
+
+
